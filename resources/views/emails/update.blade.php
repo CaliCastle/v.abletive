@@ -75,7 +75,7 @@
         <b><a href="{{ $series->link() }}" target="_blank"><img src="{{ $series->thumbnail }}" alt="{{ $series->title }}"></a></b>
         <p>嗨, <strong>{{ $user->display_name }}</strong>! - </p>
         <strong>您所订阅的《<strong><a href="{{ $series->link() }}" target="_blank">{{ $series->title }}</a></strong>》现在更新了课程噢!</strong>
-        <h3 style="text-align:center;"><a href="{{ $lesson->link() }}" target="_blank">{{ $lesson->episode() }}.{{ $lesson->title }}</a></h3>
+        <h3 style="text-align:center;"><a href="{{ $lesson->link() }}" target="_blank" style="color: #eee; text-decoration: none;">{{ $lesson->episode() }}.{{ $lesson->title }}</a></h3>
         <h4>课程介绍: {!! $lesson->description !!}</h4>
         <h4><a href="{{ url('settings/notification') }}">随时取消订阅</a></h4>
         <p>Cali Castle (@abletive)</p>

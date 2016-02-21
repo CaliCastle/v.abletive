@@ -33,9 +33,8 @@ class SeriesUpdateEventListener implements ShouldQueue
         foreach ($series->subscriber as $user) {
             if ($user->subscribed()) {
                 Mail::queue('emails.update', ['user' => $user, 'series' => $series, 'lesson' => $lesson], function ($m) use ($user) {
-                    $m->from('cali@abletive.com', config('app.site.title'));
+                    $m->from('cali@calicastle.com', config('app.site.title'));
                     $m->to($user->email)->subject('您订阅的课程更新啦!');
-                    $m->bcc('cali@calicastle.com');
                 });
             }
         }
