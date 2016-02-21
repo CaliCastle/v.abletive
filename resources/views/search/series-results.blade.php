@@ -5,7 +5,7 @@
         <img src="{{ $series->thumbnail }}" alt="{{ $series->title }}">
         <span class="meta">
             <h3>{{ $series->title }}</h3>
-            <p>{!! $series->description !!}</p>
+            <p>{!! str_limit($series->description, 130) !!}</p>
         </span>
     </a>
 </li>

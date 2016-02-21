@@ -3,7 +3,7 @@
 <li class="lesson-item item">
     <a href="{{ $lesson->link() }}">
         <h3>{{ $lesson->title }}</h3>
-        <p>{!! $lesson->description !!}</p>
+        <p>{{ str_limit($lesson->description, 80) }}</p>
     </a>
 </li>
 @endforeach

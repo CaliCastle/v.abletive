@@ -24,7 +24,7 @@
                                 @foreach($comments as $comment)
                                     <tr data-id="{{ $comment->id }}">
                                         <td><a href="{{ $comment->user->profileLink() }}">{{ str_limit($comment->user->display_name, 15) }}</a></td>
-                                        <td><a href="">{{ str_limit($comment->lesson->title, 20) }}</a></td>
+                                        <td><a href="{{ $comment->lesson->link() }}">{{ str_limit($comment->lesson->title, 20) }}</a></td>
                                         <td>{{ str_limit($comment->message, 50) }}</td>
                                         <td><a href="javascript:;" class="btn btn-danger" id="delete-btn">{{ trans('manage/series.delete_button') }}</a></td>
                                     </tr>

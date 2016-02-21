@@ -23,7 +23,7 @@
                                 <tbody>
                                 @foreach($users as $user)
                                     <tr data-id="{{ $user->id }}">
-                                        <td>{{ $user->display_name }}</td>
+                                        <td><a href="{{ $user->profileLink() }}" target="_blank">{{ $user->display_name }}</a></td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->role }}</td>
                                         <td>
