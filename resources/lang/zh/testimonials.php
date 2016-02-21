@@ -90,7 +90,7 @@ return [
         "name" => "Taioes",
         "caption" => "社区核心成员",
         "avatar" => "taioes.jpg",
-        "message" => "细致入微的解说，简单易懂的教程。"
+        "message" => "终将有一天，Cali会让Abletive这个无意义的单词，因为我们变得有意义起来，而到那一天，我们的Abletive社区，也会成为电子乐界的，Abletive帝国."
     ],
     "16" => [
         "name" => "Herny",
@@ -193,6 +193,18 @@ return [
         "caption" => "社区家庭一员",
         "avatar" => "xiaobai.png",
         "message" => "感觉中毒了."
+    ],
+    "33" => [
+        "name" => "Urazc",
+        "caption" => "社区核心成员",
+        "avatar" => "urazc.jpg",
+        "message" => "自Abletive创始以来，一直看着社区的壮大，从一个不起眼的小网站变成击败对手的知名网站。一个热心的人只为大家而无私付出，做出了这样的网站。"
+    ],
+    "34" => [
+        "name" => "Cardinal",
+        "caption" => "社区核心成员",
+        "avatar" => "cardinal.jpg",
+        "message" => "见过的最棒的中文音乐社区，Cali大大非常用心，希望越办越好!"
     ],
     "see-more" => "查看全部的认可"
 ];
