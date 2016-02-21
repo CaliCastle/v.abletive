@@ -136,7 +136,7 @@ class User extends Authenticatable
      */
     public function profileComments()
     {
-        return $this->superComments()->take(10)->get();
+        return $this->comments()->take(15)->get();
     }
 
     /**
@@ -156,7 +156,7 @@ class User extends Authenticatable
      */
     public function profileLessons()
     {
-        return $this->lessons()->latest()->take(8)->get();
+        return $this->lessons()->latest()->take(20)->get();
     }
 
     /**
