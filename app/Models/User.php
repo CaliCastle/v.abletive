@@ -289,6 +289,9 @@ class User extends Authenticatable
      */
     public function hasWatchLaterSeries(Series $series)
     {
+        if ($series->lessons->count() == 0)
+            return false;
+
         foreach ($series->lessons as $lesson) {
             if (!$this->hasWatchLater($lesson))
                 return false;
@@ -424,6 +427,9 @@ class User extends Authenticatable
      */
     public function hasFavoriteSeries(Series $series)
     {
+        if ($series->lessons->count() == 0)
+            return false;
+
         foreach ($series->lessons as $lesson) {
             if (!$this->hasFavorite($lesson))
                 return false;
