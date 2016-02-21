@@ -31,7 +31,7 @@ return [
     "comment_success" => "评论成功!",
     "level_up" => "酷哦! 您已升级为:level, 恭喜!",
     "subscription_heading" => "你不爱我了么?",
-    "subscription_message" => "本课程是Abletive专门为会员准备的课程. 不过没关系, 充个会员支持一下Cali, 一顿饭或者一杯咖啡的钱其实就够了.",
+    "subscription_message" => "本课程是Abletive专门为会员准备的课程. 不过没关系, 充个会员支持一下Cali, 请我吃顿饭或者喝杯咖啡吧.",
     "subscription_button" => "回到学习中",
     "upload_message" => "可拖拽图片至此或点击来上传",
     "upload_filesize" => "上传失败, 图片大小不可超过{{maxFilesize}}MB",
