@@ -31,7 +31,7 @@
         $('#series-select').select2();
         $('#tag-select').select2({
             tags: true,
-            tokenSeparators: [',', ' ']
+            tokenSeparators: [',']
         });
     });
 </script>
