@@ -33,6 +33,16 @@ class Video extends Model
     }
 
     /**
+     * Who has watched the lesson
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function watchedUsers()
+    {
+        return $this->belongsToMany('App\User', 'user_watched');
+    }
+
+    /**
      * Scope it show only the tutor's videos
      *
      * @param $query

@@ -344,7 +344,15 @@ class User extends Authenticatable
      */
     public function completedPercent(Series $series)
     {
-        return $series->lessons->count() ? intval(($this->watchedLessons->count() / $series->lessons->count()) * 100) : 0;
+        if ($series->lessons->count() == 0)
+            return 0;
+
+        $ids = $series->lessons()->lists('id')->toArray();
+        $watched_lessons = Video::whereHas('watchedUsers', function ($query) use ($ids) {
+            return $query->whereIn('video_id', $ids);
+        })->get();
+
+        return intval(($watched_lessons->count() / $series->lessons->count()) * 100);
     }
 
     /**
