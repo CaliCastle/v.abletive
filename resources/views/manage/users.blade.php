@@ -35,6 +35,11 @@
                                 @endforeach
                                 </tbody>
                             </table>
+                            <div class="row text-center">
+                                <p>
+                                    {!! $users->links() !!}
+                                </p>
+                            </div>
                         @else
                             <h3 class="no-result">{{ trans('messages.no_result', ["name" => trans('auth.user')]) }}</h3>
                         @endif

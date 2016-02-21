@@ -70,7 +70,7 @@ class ManageController extends Controller
      */
     public function showComments()
     {
-        $comments = Comment::paginate();
+        $comments = Comment::latest()->paginate();
         return view('manage.comments', compact('comments'));
     }
 

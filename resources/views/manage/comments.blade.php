@@ -31,6 +31,11 @@
                                 @endforeach
                                 </tbody>
                             </table>
+                            <div class="row text-center">
+                                <p>
+                                    {!! $comments->links() !!}
+                                </p>
+                            </div>
                         @else
                             <h3 class="no-result">{{ trans('messages.no_result', ["name" => trans('discussion.comment')]) }}</h3>
                         @endif
