@@ -91,6 +91,7 @@
         var $loading_text = "{{ trans('discussion.load_more') }}";
         var $valiadtion = $('.comment-validation')[0];
         var $validateCubes;
+        var $gained_xp = false;
 
         @if(!$lesson->needSubscription())
         var player = videojs('abletive-video', { "aspectRatio":"160:95", "playbackRates": [0.5, 0.75, 1, 1.5, 2, 3] }, function () {
@@ -102,6 +103,8 @@
             @unless(Auth::guest())
             @unless(auth()->user()->hasWatched($lesson))
             this.on('ended', function () {
+                if ($gained_xp)
+                        return false;
                 // When the video completed playing
                 $.ajax({
                     url: "{{ url('lessons/completed') }}/{{ $lesson->id }}",
@@ -110,6 +113,7 @@
                     dataType: "json",
                     success: function (data) {
                         showGenieMessage(data.message);
+                        $gained_xp = true;
                         $('span#user-experience').html(data.xp);
                         $('span#video-status').html('<i class="fa fa-check-circle"></i> {{ trans('lessons.status.completed') }}');
                         $($('span#video-status').parent()).addClass('completed animated rubberBand');
@@ -134,6 +138,8 @@
                             @unless(Auth::guest())
                             @unless(auth()->user()->hasWatched($lesson))
                             this.on('ended', function () {
+                        if ($gained_xp)
+                            return false;
                         // When the video completed playing
                         $.ajax({
                             url: "{{ url('lessons/completed') }}/{{ $lesson->id }}",
@@ -142,6 +148,7 @@
                             dataType: "json",
                             success: function (data) {
                                 showGenieMessage(data.message);
+                                $gained_xp = true;
                                 $('span#user-experience').html(data.xp);
                                 $('span#video-status').html('<i class="fa fa-check-circle"></i> {{ trans('lessons.status.completed') }}');
                                 $($('span#video-status').parent()).addClass('completed animated rubberBand');

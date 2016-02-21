@@ -256,4 +256,11 @@ class HomeController extends Controller
 
         return redirect('publish/lessons')->with('status', trans('messages.update_success'));
     }
+
+    public function test()
+    {
+        $lesson = Video::first();
+
+        Event::fire(new SeriesUpdateEvent($lesson->series));
+    }
 }
