@@ -92,7 +92,7 @@
                                 <li><a href="{{ url('publish/lessons') }}"><i class="fa fa-btn fa-list-alt"></i> {{ trans('header/navbar.account_items.publish') }}</a></li>
                                 <li class="divider"></li>
                                 @elseif(auth()->user()->isTutor())
-                                <li><a href="{{ url('lesson/create') }}"><i class="fa fa-btn fa-list-alt"></i> {{ trans('header/navbar.account_items.publish') }}</a></li>
+                                <li><a href="{{ url('publish/lessons') }}"><i class="fa fa-btn fa-list-alt"></i> {{ trans('header/navbar.account_items.publish') }}</a></li>
                                 <li class="divider"></li>
                                 @endif
                                 <li><a href="{{ url('settings') }}"><i class="fa fa-btn fa-sliders"></i> {{ trans('header/navbar.account_items.settings') }}</a></li>

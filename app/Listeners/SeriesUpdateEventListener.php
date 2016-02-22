@@ -31,7 +31,7 @@ class SeriesUpdateEventListener implements ShouldQueue
         $lesson = $series->lessons->reverse()->first();
 
         foreach ($series->subscriber as $user) {
-            if ($user->subscribed()) {
+            if ($user->subscribed() && !is_null($user->email) && $user->email != "") {
                 Mail::queue('emails.update', ['user' => $user, 'series' => $series, 'lesson' => $lesson], function ($m) use ($user) {
                     $m->from('cali@calicastle.com', config('app.site.title'));
                     $m->to($user->email)->subject('您订阅的课程更新啦!');
