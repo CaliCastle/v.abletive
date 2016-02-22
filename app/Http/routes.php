@@ -46,6 +46,7 @@ Route::group(['middleware' => 'web'], function () {
      */
     Route::get('language/{language}', 'HomeController@switchLanguage');
     Route::post('allows_cookie', 'HomeController@allowsCookie');
+    Route::post('validated', 'HomeController@validated');
 
     /*
      * Profiles

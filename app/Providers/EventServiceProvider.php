@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\SeriesUpdateEvent' => [
             'App\Listeners\SeriesUpdateEventListener',
         ],
+        'App\Events\CommentReplyEvent' => [
+            'App\Listeners\NewReply'
+        ]
     ];
 
     /**

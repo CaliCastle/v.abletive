@@ -212,6 +212,7 @@
                 return o;
             };
 
+        @unless(request()->hasCookie('validated'))
         $validateCubes = new HexaFlip(document.getElementById('flip-validation'), makeObject("CALI".split('')),{
             size: 150,
             margin: 12,
@@ -233,6 +234,16 @@
                 $validateCubes.setValue(getSequence("CALI", false, true));
             } else {
                 $($valiadtion).fadeOut();
+
+                $.ajax({
+                    url: "{{ url('validated') }}",
+                    type: "POST",
+                    data: {_token: $_token},
+                    dataType: "text",
+                    success: function () {
+
+                    }
+                });
                 submitComment();
             }
         });
@@ -242,6 +253,7 @@
                 $($valiadtion).fadeOut();
             }
         });
+        @endunless
 
         // Watch later actions
         $('a#watch-later-btn').each(function () {
@@ -419,7 +431,11 @@
         }
 
         $submit_button.on('click', function () {
+            @if(request()->hasCookie('validated'))
+            submitComment();
+            @else
             $($valiadtion).fadeIn();
+            @endif
         });
 
         // Load more comments

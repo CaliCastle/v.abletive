@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Events\CommentReplyEvent;
 use App\Series;
 use App\Video;
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 
 class UserController extends Controller
 {
@@ -120,24 +122,37 @@ class UserController extends Controller
      */
     public function submitLessonComment(Request $request, Video $lesson)
     {
-        if ($request->input('parent_id')) {
-            $parent = Comment::find($request->parent_id);
+        if ($request->input('parent_id') != 0) {
+            $parent = Comment::find($request->input("parent_id"));
         }
+        $message = isset($parent) ? $parent->replyLink() . $request->input('content') : $request->input('content');
+
         $comment = new Comment([
             "video_id" => $lesson->id,
             "user_id" => $request->user()->id,
             "parent_id" => $request->input('parent_id') ? $request->input('parent_id') : 0,
-            "message" => $request->input('parent_id') ? $parent->replyLink() . $request->input('content') : $request->input('content'),
+            "message" => $message,
             "user_agent" => $request->header('user-agent')
         ]);
 
-        return $lesson->comments()->save($comment) ? [
-            "status" => "success",
-            "message" => trans('messages.comment_success'),
-            "html" => view('discussion.comment-list', ["comment" => $comment])->render()] : [
-            "status" => "error",
-            "message" => trans('messages.retry')
-        ];
+        $succeeded = $lesson->comments()->save($comment);
+
+        if ($succeeded) {
+            // Fire up event
+            if ($request->user()->id !== $lesson->user->id) {
+                Event::fire(new CommentReplyEvent($request->user(), isset($parent) ? $parent->user : $lesson->user, $lesson, $message));
+            }
+
+            return [
+                "status" => "success",
+                "message" => trans('messages.comment_success'),
+                "html" => view('discussion.comment-list', ["comment" => $comment])->render()];
+        } else {
+            return [
+                "status" => "error",
+                "message" => trans('messages.retry')
+            ];
+        }
     }
 
     /**
