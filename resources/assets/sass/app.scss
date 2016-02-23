@@ -2731,3 +2731,14 @@ footer.main-footer {
     line-height: 40px;
   }
 }
+
+@media screen and (min-width: 300px) and (max-width: 450px){
+  .series,.skill {
+    width: 100% !important;
+    padding: 8px !important;
+  }
+
+  .testimonial {
+    width: 100%;
+  }
+}

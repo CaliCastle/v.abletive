@@ -53,7 +53,7 @@ class Tag extends Model
      */
     public function link()
     {
-        return action('HomeController@showTag', ["tag" => strtolower($this->name)]);
+        return action('HomeController@showTag', ["tag" => $this->name]);
     }
 
     /**

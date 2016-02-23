@@ -33,7 +33,7 @@ class SeriesController extends Controller
      */
     public function showSeries()
     {
-        $allSeries = Series::newest()->get();
+        $allSeries = Series::published()->newest()->get();
         return view('series.all', compact('allSeries'));
     }
 

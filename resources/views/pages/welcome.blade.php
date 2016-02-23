@@ -36,7 +36,7 @@
         </div>
         <div class="row">
             <div class="series-collection">
-                @forelse(\App\Series::featured() as $series)
+                @forelse(\App\Series::published()->featured() as $series)
                     @include('series.partials.series-tiles')
                 @empty
                     <h2 class="no-result">{{ trans('messages.no_result', ["name" => trans('series.title')]) }}</h2>

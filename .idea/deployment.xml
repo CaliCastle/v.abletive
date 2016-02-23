@@ -10,6 +10,9 @@
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/node_modules" />
             <excludedPath local="true" path="$PROJECT_DIR$/vendor" />
+            <excludedPath local="true" path="$PROJECT_DIR$/resources/assets" />
+            <excludedPath local="true" path="$PROJECT_DIR$/public/css" />
+            <excludedPath local="true" path="$PROJECT_DIR$/public/js" />
           </excludedPaths>
         </serverdata>
       </paths>

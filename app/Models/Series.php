@@ -150,6 +150,17 @@ class Series extends Model
     }
 
     /**
+     * Scope a query to only its published
+     *
+     * @param $query
+     * @return mixed
+     */
+    public static function scopePublished($query)
+    {
+        return $query->where('published', 1);
+    }
+
+    /**
      * Featured series for index page
      *
      * @param $query
