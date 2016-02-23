@@ -102,6 +102,7 @@
         });
 
     </script>
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=54601062" charset="UTF-8"></script>
     @stack('scripts.footer')
 </body>
 </html>
