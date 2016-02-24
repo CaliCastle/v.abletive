@@ -44,7 +44,7 @@ class ProfileController extends Controller
         // Check uniqueness for slug
         $slug = $request->input('slug');
 
-        if (!is_null(User::where('display_name', $slug)->first())) {
+        if ($slug != "" && !is_null(User::where('slug', $slug)->where('id', '!=', $request->user()->id)->first())) {
             return redirect()->back()->with('status', trans('validation.unique', ["attribute" => trans('setting/account.slug')]));
         }
 
