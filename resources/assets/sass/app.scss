@@ -399,6 +399,7 @@ form {
     float: left;
     position: relative;
     @include br();
+    max-height: 345px;
 
     &:nth-of-type(4n) {
       margin-right: 0;
@@ -505,6 +506,8 @@ form {
         display: flex;
         width: 85%;
         max-width: 85%;
+        margin-top: 10px;
+        line-height: 24px;
       }
 
       .series-count {

@@ -24,5 +24,9 @@
             <a href="{{ url('manage/comments') }}">{{ trans('manage/sidebar.comments') }}</a>
             <i class="fa fa-chevron-right"></i>
         </li>
+        <li{{ str_contains(request()->getRequestUri(), "/manage/examinations") ? " class=active" : '' }}>
+            <a href="{{ url('manage/examinations') }}">{{ trans('manage/sidebar.examinations') }}</a>
+            <i class="fa fa-chevron-right"></i>
+        </li>
     </ul>
 </nav>

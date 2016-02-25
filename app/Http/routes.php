@@ -188,4 +188,10 @@ Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
     Route::get('manage/comments', 'ManageController@showComments');
     Route::get("manage/comments/search/{keyword}", 'ManageController@searchComments');
     Route::delete('manage/comments/{comment}', 'ManageController@deleteComment');
+
+    // Examinations related
+    Route::get('manage/examinations', 'ManageController@showExaminations');
+    Route::get('manage/examination/create', 'ManageController@showCreateExamination');
+    Route::post('manage/examination/create', 'ManageController@createExamination');
+    Route::get('manage/examinations/{examination}', 'ManageController@showExam');
 });

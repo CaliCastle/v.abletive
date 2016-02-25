@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Events\SeriesUpdateEvent;
+use App\Examination;
 use App\Http\Requests\LessonsRequest;
 use App\Http\Requests\SeriesRequest;
 use App\Series;
@@ -355,5 +356,68 @@ class ManageController extends Controller
     {
         $comments = Comment::search($keyword)->paginate();
         return view('manage.comments', compact('keyword', 'comments'));
+    }
+
+    /**
+     * Show all examinations
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showExaminations()
+    {
+        $examinations = Examination::all();
+        return view('manage.examinations', compact('examinations'));
+    }
+
+    /**
+     * Show create form for examination
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showCreateExamination()
+    {
+        return view('manage.examination.create');
+    }
+
+    /**
+     * Create an examination
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function createExamination(Request $request)
+    {
+        $this->validate($request, [
+            "title" => "required"
+        ]);
+
+        return Examination::create($request->all()) ? redirect('manage/examinations')->with('status', "创建成功") : back()->withInput($request->all());
+    }
+
+    /**
+     * Show form for editing an examination
+     *
+     * @param Examination $examination
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showEditExamination(Examination $examination)
+    {
+        return view('manage.examination.edit', compact('examination'));
+    }
+
+    /**
+     * Update an examination
+     *
+     * @param Request $request
+     * @param Examination $examination
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function updateExamination(Request $request, Examination $examination)
+    {
+        $this->validate($request, [
+            "title" => "required"
+        ]);
+
+        return $examination->update($request->all()) ? back()->with('status', '更新成功') : back()->withInput($request->all());
     }
 }

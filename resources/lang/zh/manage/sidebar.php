@@ -6,5 +6,6 @@ return [
     "lessons" => "课程视频",
     "users" => "用户",
     "comments" => "评论",
-    "skills" => "技能"
+    "skills" => "技能",
+    "examinations" => "考试管理"
 ];

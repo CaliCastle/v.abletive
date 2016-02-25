@@ -6,5 +6,6 @@ return [
     "lessons" => "Lessons",
     "users" => "Users",
     "comments" => "Comments",
-    "skills" => "Skills"
+    "skills" => "Skills",
+    "examinations" => "Examinations"
 ];
