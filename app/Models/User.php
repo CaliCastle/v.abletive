@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -351,11 +352,9 @@ class User extends Authenticatable
             return 0;
 
         $ids = $series->lessons()->lists('id')->toArray();
-        $watched_lessons = Video::whereHas('watchedUsers', function ($query) use ($ids) {
-            return $query->whereIn('video_id', $ids);
-        })->get();
+        $watched_lessons = DB::table('user_watched')->where('user_id', $this->id)->whereIn('video_id', $ids)->count();
 
-        return intval(($watched_lessons->count() / $series->lessons->count()) * 100);
+        return intval(($watched_lessons / $series->lessons()->count()) * 100);
     }
 
     /**
