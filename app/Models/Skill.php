@@ -42,4 +42,23 @@ class Skill extends Model
     {
         return static::where('name', $name)->first();
     }
+
+    /**
+     * The first lesson of the skill
+     *
+     * @return mixed
+     */
+    public function firstLesson()
+    {
+        if ($this->series()->count() == 0) {
+            return false;
+        }
+        $series = $this->series()->first();
+
+        if ($series->lessons()->count() == 0) {
+            return false;
+        }
+
+        return $series->lessons()->first();
+    }
 }

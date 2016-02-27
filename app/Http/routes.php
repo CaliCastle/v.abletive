@@ -211,4 +211,8 @@ Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
 Route::group(['middleware' => ['web']], function () {
     Route::get('api/catalogs', 'APIController@showCatalogs');
     Route::get('tvOS/templates/Index.xml', 'APIController@showIndexTVML');
+    Route::get('tvOS/templates/Series.{series}.xml', 'APIController@showSeriesTVML');
+    Route::get('tvOS/templates/Skill.{skill}.xml', 'APIController@showSkillTVML');
+    Route::get('tvOS/templates/Tutor.{tutor}.xml', 'APIController@showTutorTVML');
+    Route::get('tvOS/search/{keyword}', 'APIController@searchContent');
 });

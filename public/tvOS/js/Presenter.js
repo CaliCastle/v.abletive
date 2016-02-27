@@ -88,7 +88,20 @@ var Presenter = {
              to balance document presentation times with updating the document items.
              */
             if (!currentDoc) {
-                feature.setDocument(xml, ele);
+                if (ele.hasAttribute('search')) {
+                    feature.setDocument(xml, ele);
+                    var doc = xml;
+                    var searchField = doc.getElementsByTagName("searchField").item(0);
+                    var keyboard = searchField.getFeature("Keyboard");
+
+                    keyboard.onTextChange = function() {
+                        var searchText = keyboard.text;
+                        console.log('search text changed: ' + searchText);
+                        buildResults(doc, searchText);
+                    }
+                } else {
+                    feature.setDocument(xml, ele);
+                }
             }
         }
     },
@@ -100,12 +113,11 @@ var Presenter = {
         var doc = Presenter.parser.parseFromString(resource, "application/xml");
         return doc;
     },
-    // 2
+
     modalDialogPresenter: function(xml) {
         navigationDocument.presentModal(xml);
     },
 
-    // 3
     pushDocument: function(xml) {
         navigationDocument.pushDocument(xml);
     },
@@ -165,15 +177,14 @@ var Presenter = {
                         /*
                          Event listeners are used to handle and process user actions or events. Listeners
                          can be added to the document or to each element. Events are bubbled up through the
-                         DOM heirarchy and can be handled or cancelled at at any point.
+                         DOM hierarchy and can be handled or cancelled at at any point.
 
                          Listeners can be added before or after the document has been presented.
 
                          For a complete list of available events, see the TVMLKit DOM Documentation.
                          */
                         doc.addEventListener("select", self.load.bind(self));
-                        doc.addEventListener("highlight", self.load.bind(self));
-
+                        //doc.addEventListener("highlight", self.load.bind(self));
 
                         /*
                          This is a convenience implementation for choosing the appropriate method to

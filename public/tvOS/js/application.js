@@ -18,7 +18,6 @@ App.onLaunch = function (options) {
                 menuDoc.addEventListener('select', Presenter.load.bind(Presenter));
                 Presenter.pushDocument(menuDoc);
             });
-
         } else {
             var errorDoc = createAlert("Evaluate Scripts Error", "Error attempting to evaluate external JavaScript files.");
             navigationDocument.presentModal(errorDoc);
@@ -33,7 +32,7 @@ var createAlert = function(title, description) {
         <title>${title}</title>
         <description>${description}</description>
         <button type="cancel">
-        <text>OK</text>
+        <text cancel-button="cancel">OK</text>
         </button>
       </alertTemplate>
     </document>`
@@ -83,4 +82,68 @@ function jsonRequest(options) {
     xhr.send();
 
     return xhr;
+}
+
+/**
+ * @description - an example implementation of search that reacts to the
+ * keyboard onTextChange (see Presenter.js) to filter the lockup items based on the search text
+ * @param {Document} doc - active xml document
+ * @param {String} searchText - current text value of keyboard search input
+ */
+var buildResults = function(doc, searchText) {
+    //Create parser and new input element
+    var domImplementation = doc.implementation;
+    var lsParser = domImplementation.createLSParser(1, null);
+    var lsInput = domImplementation.createLSInput();
+
+    if (searchText.trim() !== "") {
+        lsInput.stringData = `<text class="heading">正在搜索中...</text>`;
+        lsParser.parseWithContext(lsInput, doc.getElementsByTagName("collectionList").item(0), 2);
+
+        jsonRequest({
+            url: `${this.resourceLoader.BASEURL}search/${searchText}`,
+            callback: function (error, json) {
+                if (!error && json.status == "success") {
+                    if (json.series.count == 0 && json.lessons.count == 0) {
+                        //set default template fragment to display no results
+                        lsInput.stringData = `<list>
+                      <section>
+                    <header>
+                    <title>暂无相关课程</title>
+                    </header>
+                    </section>
+                    </list>`;
+                    } else {
+                        lsInput.stringData = `<shelf><header><title>找到${json.series.count}个相关系列课程</title></header><section>`;
+                        for (var i = 0; i < json.series.list.length; i++) {
+                            var series = json.series.list[i];
+                            lsInput.stringData += `<lockup class="series-list" template="${this.resourceLoader.BASEURL}templates/Series.${series.id}.xml" presentation="pushDocument">
+                    <img class="cornered" src="${series.thumbnail}" width="350" height="350" />
+                    <title>${series.title}</title>
+                    </lockup>`;
+                        }
+                        lsInput.stringData += `</section></shelf>`;
+
+                        lsInput.stringData += `<shelf><header><title>找到${json.lessons.count}个相关教程视频</title></header><section>`;
+                        for (var i = 0; i < json.series.list.length; i++) {
+                            var lesson = json.lessons.list[i];
+                            lsInput.stringData += `<lockup class="lesson-list" videoURL="${lesson.source}">
+                    <img src="${lesson.thumbnail}" width="240" height="240" />
+                    <title>${lesson.title}</title>
+                    <subtitle class="showOnHighlight">${lesson.series_title}</subtitle>
+                    </lockup>`;
+                        }
+                        lsInput.stringData += `</section></shelf>`;
+                    }
+
+                    //add the new input element to the document by providing the newly created input, the context,
+                    //and the operator integer flag (1 to append as child, 2 to overwrite existing children)
+                    lsParser.parseWithContext(lsInput, doc.getElementsByTagName("collectionList").item(0), 2);
+                } else {
+                    //lsInput.stringData = `<text class="heading">搜索失败, 请重试...</text>`;
+                    //lsParser.parseWithContext(lsInput, doc.getElementsByTagName("collectionList").item(0), 2);
+                }
+            }
+        });
+    }
 }

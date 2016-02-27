@@ -111,6 +111,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Scope a query to tutors only
+     *
+     * @param $query
+     * @return mixed
+     */
+    public static function scopeTutors($query)
+    {
+        return $query->where('role', 'Admin')->orWhere('role', 'Tutor');
+    }
+    /**
      * User's comments
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

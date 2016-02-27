@@ -6,10 +6,7 @@ var Template = function () {
              <menuItem template="${this.BASEURL}templates/Index.xml" presentation="menuBarItemPresenter">
                 <title>特色课程</title>
              </menuItem>
-             <menuItem template="${this.BASEURL}templates/Skills.xml.js" presentation="menuBarItemPresenter">
-                <title>技能方向</title>
-             </menuItem>
-             <menuItem template="${this.BASEURL}templates/Search.xml.js" presentation="menuBarItemPresenter">
+             <menuItem template="${this.BASEURL}templates/Search.xml.js" presentation="menuBarItemPresenter" search="true">
                 <title>搜索</title>
              </menuItem>
              <menuItem template="${this.BASEURL}templates/Account.xml.js" presentation="menuBarItemPresenter">
