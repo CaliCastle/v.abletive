@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '考试管理')
+@section('title', '问题管理')
 
 @section('content')
     <div class="container">
@@ -8,29 +8,27 @@
             @include('manage.partials.nav')
             <aside class="box-right">
                 <div class="content">
-                    <h2 class="heading">{{ trans('manage/sidebar.examinations') }} <a href="{{ url('manage/examination/create') }}"><i class="fa fa-plus"></i></a></h2>
+                    <h2 class="heading">问题管理 <a href="{{ action('ManageController@showCreateQuestion', ["id" => $examination->id]) }}"><i class="fa fa-plus"></i></a></h2>
                     <div class="row">
                         <table class="table table-responsive table-striped">
                             <thead>
                             <tr>
                                 <td>标题</td>
-                                <td>通过人数</td>
                                 <td>操作</td>
                             </tr>
                             </thead>
                             <tbody>
-                        @forelse($examinations as $examination)
-                            <tr data-id="{{ $examination->id }}">
-                                <td><a href="{{ action('ManageController@showExamQuestions', ["id" => $examination->id]) }}">{{ $examination->title }}</a></td>
-                                <td>{{ $examination->passedUsers()->count() }}</td>
-                                <td>
-                                    <a href="{{ action('ManageController@showEditExamination', ["id" => $examination->id]) }}" class="primary">编辑</a>
-                                    <a href="javascript:;" style="color: red;" id="delete-btn">删除</a>
-                                </td>
-                            </tr>
-                        @empty
-                            <h3 class="no-result">暂无考试</h3>
-                        @endforelse
+                            @forelse($questions as $question)
+                                <tr data-id="{{ $question->id }}">
+                                    <td>{{ $question->title }}</td>
+                                    <td>
+                                        <a href="{{ action('ManageController@showEditQuestion', ["id" => $question->id]) }}" class="primary">编辑</a>
+                                        <a href="javascript:;" style="color: red;" id="delete-btn">删除</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <h3 class="no-result">暂无相关问题</h3>
+                            @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -58,7 +56,7 @@
                     closeOnConfirm: false
                 }, function () {
                     $.ajax({
-                        url: "{{ url('manage/examination') }}/" + $id,
+                        url: "{{ url('manage/question') }}/" + $id,
                         type: "DELETE",
                         data: {_token: "{{ csrf_token() }}"},
                         dataType: "json",

@@ -31,7 +31,7 @@
         </div>
         <div class="row">
             <div class="featured-title animated animated-delay10 fadeIn">
-                <span><a href="">{{ trans('app/site.features.featured-series') }}</a></span>
+                <span><a href="{{ url('series') }}">{{ trans('app/site.features.featured-series') }}</a></span>
             </div>
         </div>
         <div class="row">
@@ -45,7 +45,7 @@
         </div>
         <div class="row">
             <div class="featured-title">
-                <span><a href="">{{ trans('app/site.features.featured-skills') }}</a></span>
+                <span><a href="{{ url('skills') }}">{{ trans('app/site.features.featured-skills') }}</a></span>
             </div>
         </div>
         <div class="row">

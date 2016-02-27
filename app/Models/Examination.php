@@ -12,10 +12,22 @@ class Examination extends Model
     ];
 
     /**
+     * Relationship to its passed users
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function passedUsers()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    /**
+     * Relationship to its questions
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
     }
 }

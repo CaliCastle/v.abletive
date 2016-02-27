@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Answer;
 use App\Comment;
 use App\Events\SeriesUpdateEvent;
 use App\Examination;
 use App\Http\Requests\LessonsRequest;
 use App\Http\Requests\SeriesRequest;
+use App\Question;
 use App\Series;
 use App\Skill;
 use App\Tag;
@@ -406,7 +408,7 @@ class ManageController extends Controller
     }
 
     /**
-     * Update an examination
+     * Updates an examination
      *
      * @param Request $request
      * @param Examination $examination
@@ -419,5 +421,139 @@ class ManageController extends Controller
         ]);
 
         return $examination->update($request->all()) ? back()->with('status', '更新成功') : back()->withInput($request->all());
+    }
+
+    /**
+     * Deletes an examination
+     *
+     * @param Examination $examination
+     * @return array
+     * @throws \Exception
+     */
+    public function deleteExamination(Examination $examination)
+    {
+        return $examination->delete() ? [
+            'status' => "success",
+            'message' => "删除成功"
+        ] : [
+            'status' => "error",
+            'message' => "删除失败"
+        ];
+    }
+
+    /**
+     * Show all questions
+     *
+     * @param Examination $examination
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showExamQuestions(Examination $examination)
+    {
+        $questions = $examination->questions;
+
+        return view('manage.examination.questions.all', compact('examination', 'questions'));
+    }
+
+    /**
+     * Show form for creating a question
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showCreateQuestion()
+    {
+        return view('manage.examination.questions.create');
+    }
+
+    /**
+     * Creates a question
+     *
+     * @param Request $request
+     * @param Examination $examination
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function createQuestion(Request $request, Examination $examination)
+    {
+        $this->validate($request, [
+            "correct" => "required",
+            "title" => "required"
+        ]);
+
+        $question = Question::create($request->only('title'));
+        $question->examination()->associate($examination);
+        $question->save();
+
+        $i = 1;
+        foreach ($request->input('answers') as $title) {
+            $answer = new Answer;
+            $answer->title = $title;
+            $answer->question()->associate($question);
+            if ($request->input('correct') == $i)
+                $answer->correct = true;
+            $answer->save();
+
+            $i++;
+        }
+
+        return redirect('manage/examination/'.$examination->id.'/questions')->with('status', '添加成功');
+    }
+
+    /**
+     * Show form for editing question
+     *
+     * @param Question $question
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showEditQuestion(Question $question)
+    {
+        return view('manage.examination.questions.edit', compact('question'));
+    }
+
+    /**
+     * Updates a question
+     *
+     * @param Request $request
+     * @param Question $question
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateQuestion(Request $request, Question $question)
+    {
+        $this->validate($request, [
+            "correct" => "required",
+            "title" => "required"
+        ]);
+
+        $question->update($request->only('title'));
+
+        $i = 1;
+        foreach ($request->input('answers') as $title) {
+            $answer = $question->answers[$i-1];
+            $answer->title = $title;
+            if ($request->input('correct') == $i)
+                $answer->correct = true;
+            else
+                $answer->correct = false;
+            $answer->save();
+            $i++;
+        }
+
+        return back()->with('status', '更新成功');
+    }
+
+    /**
+     * Deletes a question
+     *
+     * @param Question $question
+     * @return array
+     * @throws \Exception
+     */
+    public function deleteQuestion(Question $question)
+    {
+        return $question->delete() ? [
+            'status' => "success",
+            'message' => "删除成功"
+        ] : [
+            'status' => "error",
+            'message' => "删除失败"
+        ];
     }
 }

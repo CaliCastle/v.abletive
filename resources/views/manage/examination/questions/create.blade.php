@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '新增考试')
+@section('title', '新增问题')
 
 @section('content')
     <div class="container">
@@ -8,11 +8,11 @@
             @include('manage.partials.nav')
             <aside class="box-right">
                 <div class="content">
-                    <h2 class="heading">新增考试</h2>
-                    @include('manage.examination.partials.form', [
-                       "url" => url('manage/examination/create'),
+                    <h2 class="heading">新增问题</h2>
+                    @include('manage.examination.questions.partials.form', [
+                       "url" => url()->current(),
                        "button_text" => "新增",
-                       "examination" => new \App\Examination])
+                       "question" => new \App\Question])
                 </div>
             </aside>
         </section>

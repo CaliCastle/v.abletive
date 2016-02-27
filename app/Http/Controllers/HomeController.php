@@ -269,13 +269,10 @@ class HomeController extends Controller
         return redirect('publish/lessons')->with('status', trans('messages.update_success'));
     }
 
-//    public function test()
-//    {
-//        $lesson = Video::first();
-//
-//        $user = User::all()->reverse()->first();
-//
-////        Event::fire(new CommentReplyEvent($user, User::first(), $lesson, "我是评论..."));
-//        return view('emails.new_comment', ["sender" => $user, "receiver" => User::first(), "lesson" => $lesson, "content" => "我是评论"]);
-//    }
+    public function test()
+    {
+        $series = Series::first();
+
+        return $series;
+    }
 }

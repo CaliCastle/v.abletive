@@ -30,7 +30,7 @@ Route::group(['middleware' => 'web'], function () {
     });
     Route::get('/home', 'HomeController@index');
 
-    Route::get('test', 'HomeController@test');
+//    Route::get('test', 'HomeController@test');
 
     /*
      * Pages
@@ -193,5 +193,22 @@ Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
     Route::get('manage/examinations', 'ManageController@showExaminations');
     Route::get('manage/examination/create', 'ManageController@showCreateExamination');
     Route::post('manage/examination/create', 'ManageController@createExamination');
-    Route::get('manage/examinations/{examination}', 'ManageController@showExam');
+    Route::get('manage/examination/{examination}', 'ManageController@showEditExamination');
+    Route::post('manage/examination/{examination}', 'ManageController@updateExamination');
+    Route::delete('manage/examination/{examination}', 'ManageController@deleteExamination');
+
+    Route::get('manage/examination/{examination}/questions', 'ManageController@showExamQuestions');
+    Route::get('manage/examination/{examination}/questions/create', 'ManageController@showCreateQuestion');
+    Route::post('manage/examination/{examination}/questions/create', 'ManageController@createQuestion');
+    Route::get('manage/questions/{question}', 'ManageController@showEditQuestion');
+    Route::post('manage/questions/{question}', 'ManageController@updateQuestion');
+    Route::delete('manage/question/{question}', 'ManageController@deleteQuestion');
+});
+
+/**
+ * API routes
+ */
+Route::group(['middleware' => ['web']], function () {
+    Route::get('api/catalogs', 'APIController@showCatalogs');
+    Route::get('tvOS/templates/Index.xml', 'APIController@showIndexTVML');
 });

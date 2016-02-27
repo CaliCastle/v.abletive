@@ -22,23 +22,30 @@ class CreateExaminationsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('examination_id');
             $table->text('title');
+            $table->timestamps();
         });
 
         Schema::create('examination_answers', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('question_id');
             $table->text('title');
             $table->boolean('correct');
+            $table->timestamps();
+
+            $table->foreign('question_id')->references('id')->on('examination_questions')->onDelete('cascade');
         });
 
         Schema::create('certificates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('examination_id');
             $table->string('image');
+            $table->timestamps();
         });
 
         Schema::create('examination_user', function (Blueprint $table) {
             $table->unsignedInteger('examination_id')->index();
             $table->unsignedInteger('user_id')->index();
+            $table->timestamps();
 
             $table->primary(['examination_id', 'user_id']);
             $table->foreign('examination_id')->references("id")->on('examinations')->onDelete('cascade');

@@ -1,6 +1,6 @@
 <form action="{{ $url }}" method="POST" class="setting-form">
     {!! csrf_field() !!}
-    <div class="form-group">
+    <div class="form-group{{ $errors->has('title') ? " has-error" : '' }}">
         <label for="">标题</label>
         <input type="text" class="form-control" name="title" value="{{ old('title') ? old('title') : $examination->title }}" required>
     </div>
