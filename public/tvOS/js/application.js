@@ -31,9 +31,6 @@ var createAlert = function(title, description) {
       <alertTemplate>
         <title>${title}</title>
         <description>${description}</description>
-        <button type="cancel">
-        <text cancel-button="cancel">OK</text>
-        </button>
       </alertTemplate>
     </document>`
     var parser = new DOMParser();
@@ -125,9 +122,9 @@ var buildResults = function(doc, searchText) {
                         lsInput.stringData += `</section></shelf>`;
 
                         lsInput.stringData += `<shelf><header><title>找到${json.lessons.count}个相关教程视频</title></header><section>`;
-                        for (var i = 0; i < json.series.list.length; i++) {
+                        for (var i = 0; i < json.lessons.list.length; i++) {
                             var lesson = json.lessons.list[i];
-                            lsInput.stringData += `<lockup class="lesson-list" videoURL="${lesson.source}">
+                            lsInput.stringData += `<lockup class="lesson-list" videoURL="${lesson.source}" title="${lesson.title}" description="${lesson.description}" cover="${lesson.thumbnail}">
                     <img src="${lesson.thumbnail}" width="240" height="240" />
                     <title>${lesson.title}</title>
                     <subtitle class="showOnHighlight">${lesson.series_title}</subtitle>
@@ -146,4 +143,60 @@ var buildResults = function(doc, searchText) {
             }
         });
     }
+}
+
+function loadComplete(doc) {
+    var domImplementation = doc.implementation;
+    var lsParser = domImplementation.createLSParser(1, null);
+    var lsInput = domImplementation.createLSInput();
+
+    var later_ids = localStorage.getItem('later_ids') || "";
+    var favorite_ids = localStorage.getItem('favorite_ids') || "";
+
+    jsonRequest({
+        url: `${this.resourceLoader.BASEURL}templates/MySeries.xml?later_ids=${later_ids}&favorite_ids=${favorite_ids}`,
+        callback: function (error, json) {
+            console.log("check");
+            if (!error && json.status == "success") {
+                lsInput.stringData = `<listItemLockup>
+                <title>我的最爱</title>
+                <decorationLabel>${json.favorite_count}</decorationLabel>
+                <relatedContent>
+                    <grid>
+                        <section>`;
+                for (var i = 0; i < json.favorite_count; i++) {
+                    var series = json.favorites.list[i];
+                    lsInput.stringData += `<lockup template="${this.resourceLoader.BASEURL}templates/Series.${series.id}.xml" presentation="pushDocument">
+                                <img src="${series.thumbnail}" width="350" height="350" />
+                                <title>${series.title}</title>
+                            </lockup>`;
+                }
+
+                lsInput.stringData += `</section>
+                    </grid>
+                </relatedContent>
+            </listItemLockup>
+            <listItemLockup>
+                <title>稍后观看</title>
+                <decorationLabel>${json.later_count}</decorationLabel>
+                <relatedContent>
+                    <grid>
+                        <section>`;
+                for (var i = 0; i< json.later_count; i++) {
+                    var series = json.laters.list[i];
+                    lsInput.stringData += `<lockup template="${this.resourceLoader.BASEURL}templates/Series.${series.id}.xml" presentation="pushDocument">
+                                <img src="${series.thumbnail}" width="350" height="350" />
+                                <title>${series.title}</title>
+                            </lockup>`;
+                }
+                lsInput.stringData += `
+                        </section>
+                    </grid>
+                </relatedContent>
+            </listItemLockup>`;
+
+                lsParser.parseWithContext(lsInput, doc.getElementById("main-section"), 2);
+            }
+        }
+    });
 }

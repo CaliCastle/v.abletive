@@ -6,10 +6,13 @@ use App\Series;
 use App\Skill;
 use App\User;
 use App\Video;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class APIController extends Controller
 {
@@ -71,6 +74,17 @@ class APIController extends Controller
       .showTextOnHighlight {
         tv-text-highlight-style: show-on-highlight;
       }
+      .status {
+        background-color: rgba(0,0,0,0.65);
+        padding: 10;
+        margin: 10;
+        width: 45pt;
+        color: #eee;
+        tv-position: bottom-right;
+        font-size: 18pt;
+        highlight-color: #fff;
+        text-align: right;
+      }
     </style>
   </head>
   <stackTemplate theme="dark" class="darkBackgroundColor">
@@ -91,6 +105,13 @@ class APIController extends Controller
             $content .= "<lockup template=\"" . $this->templateURL . "Series.{$s->id}.xml\" presentation=\"pushDocument\">
             <img class=\"cornered\" src=\"{$s->thumbnail}\" width=\"320\" height=\"320\" />
             <title>" . htmlspecialchars($s->title) . "</title>
+            <overlay class='status'>";
+            if ($s->recentlyUpdated()) {
+                $content .= "<title style='tv-text-style: footnote;'>新</title>";
+            } else if ($s->recentlyUpdated()) {
+                $content .= "<title style='tv-text-style: footnote;'>新</title>";
+            }
+            $content .= "</overlay><subtitle class='showTextOnHighlight'>共".$s->lessons()->count()."集</subtitle>
           </lockup>";
         }
         $content .= '</section>
@@ -152,11 +173,11 @@ class APIController extends Controller
          <itemBanner>
             <heroImg src="'.$series->thumbnail.'" width="400" height="400" />
             <row>
-                <buttonLockup>
+                <buttonLockup series-id="'.$series->id.'" later="true">
                     <badge src="resource://button-add" />
                     <title>稍后观看</title>
                 </buttonLockup>
-                <buttonLockup>
+                <buttonLockup series-id="'.$series->id.'" favorite="true">
                     <badge src="resource://button-rate" />
                     <title>添加最爱</title>
                 </buttonLockup>
@@ -169,6 +190,8 @@ class APIController extends Controller
          <row>
             <text>'.$series->lessons()->count().'节课 </text>
             <text>'.$series->totalMinutes().'分钟</text>
+            <text>'.$series->created_at->format('Y-m-d').'</text>
+            <text>系列'. ($series->completed ? "已" : "未") .'完结</text>
          </row>
       </header>
       <section>
@@ -177,7 +200,7 @@ class APIController extends Controller
       <section>
       ';
         foreach ($series->lessons as $lesson) {
-            $content .= "<listItemLockup videoURL='{$lesson->source}'>
+            $content .= "<listItemLockup videoURL='{$lesson->source}' title='".htmlspecialchars($lesson->title)."' description='".htmlspecialchars($lesson->description)."' cover='".$lesson->series->thumbnail."'>
                 <ordinal>{$lesson->episode()}</ordinal>
                 <title>".htmlspecialchars($lesson->title)."</title>
                 <decorationLabel>{$lesson->duration}</decorationLabel>
@@ -298,7 +321,7 @@ class APIController extends Controller
         ';
         if ($tutor->profileLessons()->count()) {
             foreach ($tutor->profileLessons() as $lesson) {
-                $content .= '<listItemLockup class="lesson" videoURL="'.$lesson->source.'">
+                $content .= '<listItemLockup class="lesson" videoURL="'.$lesson->source.'" title="'.htmlspecialchars($lesson->title).'" description="'.htmlspecialchars($lesson->description).'" cover="'.$lesson->series->thumbnail.'">
           <title>'.htmlspecialchars($lesson->title).'</title>
           <text class="series-title">'.htmlspecialchars($lesson->series->title).'</text>
           <decorationLabel>'.$lesson->duration.'</decorationLabel>
@@ -338,7 +361,13 @@ class APIController extends Controller
 
         $lesson_list = collect([]);
         foreach ($lessons as $lesson) {
-            $lesson_list->push(["source" => $lesson->source, "title" => htmlspecialchars($lesson->title), "thumbnail" => $lesson->series->thumbnail, "series_title" => htmlspecialchars($lesson->series->title)]);
+            $lesson_list->push([
+                "source" => $lesson->source,
+                "title" => htmlspecialchars($lesson->title),
+                "thumbnail" => $lesson->series->thumbnail,
+                "series_title" => htmlspecialchars($lesson->series->title),
+                "description" => htmlspecialchars($lesson->description)
+            ]);
         }
 
         return [
@@ -350,6 +379,80 @@ class APIController extends Controller
             'lessons' => [
                 "count" => $lessons->count(),
                 "list" => $lesson_list
+            ]
+        ];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function showLoginTVML()
+    {
+        $token = str_random(15);
+        Cache::put($token, $token, Carbon::now()->addMinutes(10));
+
+        $content = 'var Template = function() { return `<?xml version="1.0" encoding="UTF-8" ?>
+<document>
+    <formTemplate>
+        <banner>
+            <img src="http://qr.liantu.com/api.php?text=abletive://tvOS_auth_'.$token.'&bg=EEEEEE&fg=111111&w=800&el=5" width="800" height="800"/>
+            <description>打开Abletive iOS客户端扫描二维码</description>
+        </banner>
+        <footer>
+            <text>版本1.1以上登录后扫描二维码即可, 二维码将在10分钟后无效</text>
+        </footer>
+     </formTemplate>
+</document>`;}';
+
+        return response($content)->header('Content-Type', "application/x-javascript");
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function showMySeriesTVML(Request $request)
+    {
+        $later_ids = $request->input('later_ids');
+        $favorite_ids = $request->input('favorite_ids');
+
+        $later_count = 0;
+        if ($later_ids && $later_ids != "") {
+            $ids = explode("-", $later_ids);
+            $later_list = collect([]);
+            foreach ($ids as $id) {
+                if ($id == "")
+                    continue;
+                $series = Series::find($id);
+                $later_list->push(["id" => $series->id, "thumbnail" => $series->thumbnail, "title" => htmlspecialchars($series->title)]);
+                $later_count++;
+            }
+        }
+
+        $favorite_count = 0;
+        if ($favorite_ids && $favorite_ids != "") {
+            $ids = explode("-", $favorite_ids);
+            $favorite_list = collect([]);
+            foreach ($ids as $id) {
+                if ($id == "")
+                    continue;
+                $series = Series::find($id);
+                $favorite_list->push(["id" => $series->id, "thumbnail" => $series->thumbnail, "title" => htmlspecialchars($series->title)]);
+                $favorite_count++;
+            }
+        }
+
+        /** @var Collection $later_list */
+        /** @var Collection $favorite_list */
+        return [
+            "status" => "success",
+            "later_count" => $later_count,
+            "favorite_count" => $favorite_count,
+            "laters" => [
+                "list" => isset($later_list) ? $later_list : ""
+            ],
+            "favorites" => [
+                "list" => isset($favorite_list) ? $favorite_list : ""
             ]
         ];
     }

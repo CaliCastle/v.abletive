@@ -1,4 +1,5 @@
 var Presenter = {
+    loadingIndicatorVisible: false,
     /**
      * @description This function demonstrate the default way of present a document.
      * The document can be presented on screen by adding to to the documents array
@@ -96,11 +97,20 @@ var Presenter = {
 
                     keyboard.onTextChange = function() {
                         var searchText = keyboard.text;
-                        console.log('search text changed: ' + searchText);
                         buildResults(doc, searchText);
                     }
+                } else if (ele.hasAttribute('load')) {
+                    feature.setDocument(xml, ele);
+                    var doc = xml;
+                    doc.addEventListener('load', loadComplete(doc));
                 } else {
                     feature.setDocument(xml, ele);
+                }
+            } else {
+                if (ele.hasAttribute('load')) {
+                    feature.setDocument(xml, ele);
+                    var doc = xml;
+                    doc.addEventListener('load', loadComplete(doc));
                 }
             }
         }
@@ -135,17 +145,86 @@ var Presenter = {
             ele = event.target,
             videoURL = ele.getAttribute("videoURL"),
             templateURL = ele.getAttribute("template"),
-            presentation = ele.getAttribute("presentation");
+            presentation = ele.getAttribute("presentation"),
+            series_id = ele.getAttribute("series-id");
 
         if(videoURL) {
             //2
             var player = new Player();
             var playlist = new Playlist();
             var mediaItem = new MediaItem("video", videoURL);
+            mediaItem.title = ele.getAttribute('title');
+            mediaItem.description = ele.getAttribute('description');
+            mediaItem.artworkImageURL = ele.getAttribute('cover');
 
             player.playlist = playlist;
             player.playlist.push(mediaItem);
             player.present();
+
+            return;
+        }
+
+        if (series_id) {
+            if (ele.hasAttribute('favorite')) {
+                var later_id_string = localStorage.getItem('favorite_ids') || "";
+                var later_ids = later_id_string.split('-');
+                var favorited = false;
+                var newIDs = [];
+
+                later_ids.forEach(function (id) {
+                    if (id.trim() == "") {
+                        return;
+                    }
+                    if (series_id == id) {
+                        favorited = true;
+                    } else {
+                        newIDs.push(id);
+                    }
+                });
+                if (!favorited) {
+                    newIDs.push(series_id);
+                }
+                var alertDoc = favorited ? createAlert("已取消最爱", "") : createAlert("已添加到最爱", "");
+                navigationDocument.presentModal(alertDoc);
+                setTimeout(function () {
+                    navigationDocument.dismissModal();
+                }, 1120);
+
+                if (newIDs.join('-').trim() == "") {
+                    localStorage.removeItem('favorite_ids');
+                } else {
+                    localStorage.setItem('favorite_ids', newIDs.join('-'));
+                }
+            } else {
+                var id_string = localStorage.getItem('later_ids') || "";
+                var ids = id_string.split('-');
+                var latered = false;
+                var newIDs = [];
+                ids.forEach(function (id) {
+                    if (id.trim() == "") {
+                        return;
+                    }
+                    if (id == series_id) {
+                        latered = true;
+                    } else {
+                        newIDs.push(id);
+                    }
+                });
+                if (!latered) {
+                    newIDs.push(series_id);
+                }
+                var alertDoc = latered ? createAlert("已移除稍后观看", "") : createAlert("已添加到稍后观看", "");
+                navigationDocument.presentModal(alertDoc);
+                setTimeout(function () {
+                    navigationDocument.dismissModal();
+                }, 1120);
+
+                if (newIDs.join('-').trim() == "") {
+                    localStorage.removeItem('later_ids');
+                } else {
+                    localStorage.setItem('later_ids', newIDs.join('-'));
+                }
+            }
         }
 
         /*

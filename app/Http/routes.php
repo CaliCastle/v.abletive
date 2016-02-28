@@ -214,5 +214,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('tvOS/templates/Series.{series}.xml', 'APIController@showSeriesTVML');
     Route::get('tvOS/templates/Skill.{skill}.xml', 'APIController@showSkillTVML');
     Route::get('tvOS/templates/Tutor.{tutor}.xml', 'APIController@showTutorTVML');
+    Route::get('tvOS/templates/Login.xml', 'APIController@showLoginTVML');
+    Route::get('tvOS/templates/MySeries.xml', 'APIController@showMySeriesTVML');
     Route::get('tvOS/search/{keyword}', 'APIController@searchContent');
 });
