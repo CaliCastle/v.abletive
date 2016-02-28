@@ -547,10 +547,16 @@ class User extends Authenticatable
         if ($result) {
             $expired_at = $result;
 
+            if ($this->isTutor() || $this->isManager()) {
+                $role = $this->role;
+            } else {
+                $role = $expired_at <= Carbon::now() ? "Member" : "Subscriber";
+            }
+
             $this->update([
                 "email" => $json->private_info->email,
                 "expired_at" => $expired_at,
-                "role" => $expired_at <= Carbon::now() ? "Member" : "Subscriber",
+                "role" => $role,
                 "avatar" => $this->filterImageTag($json->public_info->avatar),
                 "display_name" => $json->public_info->display_name,
                 "description" => $json->public_info->description,

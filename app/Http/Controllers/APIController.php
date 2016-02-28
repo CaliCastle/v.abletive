@@ -296,7 +296,7 @@ class APIController extends Controller
             itml-item-height: 90;
         }
         .series-title {
-            font-size: 20pt;
+            font-size: 23pt;
             color: rgba(220,250,255, 0.6);
             font-weight: medium;
             margin: 0 20;
