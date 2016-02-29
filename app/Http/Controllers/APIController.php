@@ -164,6 +164,7 @@ class APIController extends Controller
         padding: 15;
         background-color: transparent;
         color: rgba(255,255,255,0.65);
+        tv-text-max-lines: 4;
       }
     </style>
   </head>
@@ -195,12 +196,12 @@ class APIController extends Controller
          </row>
       </header>
       <section>
-        <description class="desc">'.htmlspecialchars($series->description).'</description>
+        <description class="desc">'.htmlspecialchars(str_replace('<br>', ' ', $series->description)).'</description>
       </section>
       <section>
       ';
         foreach ($series->lessons as $lesson) {
-            $content .= "<listItemLockup videoURL='{$lesson->source}' title='".htmlspecialchars($lesson->title)."' description='".htmlspecialchars($lesson->description)."' cover='".$lesson->series->thumbnail."'>
+            $content .= "<listItemLockup videoURL='{$lesson->source}' title='".htmlspecialchars($lesson->title)."' description='".htmlspecialchars(str_replace('<br>', ' ', $lesson->description))."' cover='".$lesson->series->thumbnail."'>
                 <ordinal>{$lesson->episode()}</ordinal>
                 <title>".htmlspecialchars($lesson->title)."</title>
                 <decorationLabel>{$lesson->duration}</decorationLabel>
@@ -268,6 +269,18 @@ class APIController extends Controller
                 $content .= '<lockup template="' . $this->templateURL . 'Series.'.$series->id.'.xml" presentation="pushDocument">
                     <img class="cornered" src="'.$series->thumbnail.'" width="290" height="290" />
                     <title>'.htmlspecialchars($series->title).'</title>
+                    <relatedContent>
+                        <infoTable>
+                            <header>
+                                <title>系列教程: '.htmlspecialchars($series->title).'</title>
+                            </header>
+                            <info>
+                                <description style="text-align: center;">
+                                '.htmlspecialchars(str_replace('<br>', ' ', $series->description)).
+                                '</description>
+                            </info>
+                        </infoTable>
+                    </relatedContent>
                 </lockup>';
             }
             $content .= '
@@ -321,7 +334,7 @@ class APIController extends Controller
         ';
         if ($tutor->profileLessons()->count()) {
             foreach ($tutor->profileLessons() as $lesson) {
-                $content .= '<listItemLockup class="lesson" videoURL="'.$lesson->source.'" title="'.htmlspecialchars($lesson->title).'" description="'.htmlspecialchars($lesson->description).'" cover="'.$lesson->series->thumbnail.'">
+                $content .= '<listItemLockup class="lesson" videoURL="'.$lesson->source.'" title="'.htmlspecialchars($lesson->title).'" description="'.htmlspecialchars(str_replace('<br>', ' ', $lesson->description)).'" cover="'.$lesson->series->thumbnail.'">
           <title>'.htmlspecialchars($lesson->title).'</title>
           <text class="series-title">'.htmlspecialchars($lesson->series->title).'</text>
           <decorationLabel>'.$lesson->duration.'</decorationLabel>
