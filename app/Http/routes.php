@@ -209,7 +209,11 @@ Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
  * API routes
  */
 Route::group(['middleware' => ['web']], function () {
+    // JSON api related
     Route::get('api/catalogs', 'APIController@showCatalogs');
+    Route::get('api/index', 'APIController@showIndex');
+
+    // tvOS related
     Route::get('tvOS/templates/Index.xml', 'APIController@showIndexTVML');
     Route::get('tvOS/templates/Series.{series}.xml', 'APIController@showSeriesTVML');
     Route::get('tvOS/templates/Skill.{skill}.xml', 'APIController@showSkillTVML');

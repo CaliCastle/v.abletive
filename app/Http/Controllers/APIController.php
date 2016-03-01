@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\APIRequest;
 use App\Series;
 use App\Skill;
 use App\User;
@@ -26,8 +27,14 @@ class APIController extends Controller
     {
         $this->baseURL = url('tvOS/') . '/';
         $this->templateURL = $this->baseURL . "templates/";
+        app()->setLocale('zh');
     }
 
+    /**
+     * Show catalogs
+     *
+     * @return array
+     */
     public function showCatalogs()
     {
         $series = Series::all();
@@ -41,6 +48,46 @@ class APIController extends Controller
                 "count" => $skills->count(),
                 "list" => $skills->toArray()
             ]
+        ];
+    }
+
+    /**
+     * @param APIRequest $request
+     * @return array
+     */
+    public function showIndex(APIRequest $request)
+    {
+        $series = Series::published()->featured();
+        $series_list = collect([]);
+        $testimonials = collect([]);
+
+        for($i = 1; $i <= 10; $i++) {
+            $testimonials->push([
+                "avatar" => url('assets/images/testimonials') . '/' . trans("testimonials.{$i}.avatar"),
+                "name" => trans("testimonials.{$i}.name"),
+                "caption" => trans("testimonials.{$i}.caption"),
+                "message" => trans("testimonials.{$i}.message")]);
+        }
+
+        foreach ($series as $s) {
+            $array = $s->toArray();
+            $array = array_add($array, "episodes", $s->lessons()->count());
+            $array = array_add($array, "recently_published", $s->recentlyPublished() == true ? 1 : 0);
+            $array = array_add($array, "recently_updated", $s->recentlyUpdated() == true ? 1 : 0);
+            $series_list->push($array);
+        }
+
+        return [
+            "series" => [
+                "count" => $series->count(),
+                "list" => $series_list
+            ],
+            "banner" => [
+                "heading" => trans('app/site.level-up.heading'),
+                "message-1" => trans('app/site.level-up.paragraph'),
+                "message-2" => trans('app/site.level-up.paragraph-2')
+            ],
+            "testimonials" => $testimonials
         ];
     }
 
