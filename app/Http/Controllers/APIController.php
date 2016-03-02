@@ -58,6 +58,7 @@ class APIController extends Controller
     public function showIndex(APIRequest $request)
     {
         $series = Series::published()->featured();
+        $tutors = User::tutors()->take(8)->get();
         $series_list = collect([]);
         $testimonials = collect([]);
 
@@ -81,6 +82,10 @@ class APIController extends Controller
             "series" => [
                 "count" => $series->count(),
                 "list" => $series_list
+            ],
+            "tutors" => [
+                "count" => $tutors->count(),
+                "list" => $tutors
             ],
             "banner" => [
                 "heading" => trans('app/site.level-up.heading'),
