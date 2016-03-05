@@ -59,6 +59,8 @@ class APIController extends Controller
     {
         $series = Series::published()->featured();
         $tutors = User::tutors()->take(8)->get();
+
+//        $tutor_list = collect([]);
         $series_list = collect([]);
         $testimonials = collect([]);
 
@@ -69,6 +71,11 @@ class APIController extends Controller
                 "caption" => trans("testimonials.{$i}.caption"),
                 "message" => trans("testimonials.{$i}.message")]);
         }
+//
+//        foreach ($tutors as $tutor) {
+//            $array = $tutor->toArray();
+//            $array = array_add($array, "profile_slug", $tutor->profileLink())
+//        }
 
         foreach ($series as $s) {
             $array = $s->toArray();
@@ -87,12 +94,20 @@ class APIController extends Controller
                 "count" => $tutors->count(),
                 "list" => $tutors
             ],
-            "banner" => [
-                "heading" => trans('app/site.level-up.heading'),
-                "message-1" => trans('app/site.level-up.paragraph'),
-                "message-2" => trans('app/site.level-up.paragraph-2')
-            ],
             "testimonials" => $testimonials
+        ];
+    }
+
+    /**
+     * @param Series $series
+     * @return array
+     */
+    public function showSeries(Series $series)
+    {
+        $episodes = $series->lessons;
+
+        return [
+            "episodes" => $episodes
         ];
     }
 

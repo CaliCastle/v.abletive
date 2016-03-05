@@ -212,6 +212,7 @@ Route::group(['middleware' => ['web']], function () {
     // JSON api related
     Route::get('api/catalogs', 'APIController@showCatalogs');
     Route::get('api/index', 'APIController@showIndex');
+    Route::get('api/series/{series}', 'APIController@showSeries');
 
     // tvOS related
     Route::get('tvOS/templates/Index.xml', 'APIController@showIndexTVML');
