@@ -22,6 +22,10 @@ class Video extends Model
         "published_at"
     ];
 
+    protected $touches = [
+        "series"
+    ];
+
     /**
      * Whose video it is
      *

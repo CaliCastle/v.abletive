@@ -11,11 +11,11 @@
     }
 
     .container {
-        width: 600px;
-        left: 50%;
+        justify-content: center;
+        align-items: center;
         position: relative;
-        margin-left: -300px;
-        margin-top: 50px;
+        display: flex;
+        margin-top: 150px;
     }
 
     h1 {
@@ -26,13 +26,16 @@
         width: 110px;
         margin-left: -55px;
         left: 50%;
-        position: relative;
+        position: absolute;
+        top: -120px;
     }
 
     .box {
         padding: 25px;
         margin: 10px 0;
         background-color: #fff;
+        flex: 1;
+        max-width: 500px;
     }
 
     .box h3 {
@@ -47,6 +50,9 @@
     .box b {
         text-align: center;
         padding: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .box p {
@@ -55,10 +61,14 @@
     
     .box img {
         max-width: 75%;
+        flex: 1;
     }
 
     .footer {
         text-align: right;
+        position: absolute;
+        bottom: -10%;
+        right: 5%;
     }
     
     .footer a {

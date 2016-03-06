@@ -11,38 +11,48 @@
     }
 
     .container {
-        width: 600px;
-        left: 50%;
+        justify-content: center;
+        align-items: center;
         position: relative;
-        margin-left: -300px;
-        margin-top: 50px;
+        display: flex;
+        margin-top: 150px;
     }
 
     h1 {
         color: #000;
     }
 
-    .container > p > img {
-        width: 120px;
+    .container > img {
+        width: 110px;
+        margin-left: -55px;
+        left: 50%;
+        position: absolute;
+        top: -120px;
     }
 
     .box {
         padding: 25px;
         margin: 10px 0;
         background-color: #fff;
+        flex: 1;
+        max-width: 500px;
     }
 
     .box h3 {
         text-align: center;
         line-height: 30px;
         font-size: 30px;
+        background-color: #573e81;
         padding: 10px;
-        color: #111;
+        color: #fff;
     }
 
     .box b {
         text-align: center;
         padding: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .box p {
@@ -51,10 +61,14 @@
 
     .box img {
         max-width: 75%;
+        flex: 1;
     }
 
     .footer {
         text-align: right;
+        position: absolute;
+        bottom: -10%;
+        right: 5%;
     }
 
     .footer a {
@@ -79,12 +93,12 @@
 </style>
 <body>
 <div class="container">
-    <p style="text-align:center;"><img src="{{ url('favicon.png') }}" alt=""></p>
+    <img src="{{ url('favicon.png') }}" alt="">
     <div class="box">
         <h2 style="text-align:center;">{{ $sender->display_name . "在《{$lesson->title}》中回复了您:" }}</h2>
         <strong><img class="avatar" src="{{ $sender->avatar }}" alt="{{ $sender->display_name }}的头像">:{!! $content !!}</strong>
         <p>点击下面的链接前往查看:</p>
-        <h3 style="text-align:center;"><a href="{{ $lesson->link() }}" target="_blank" style="color: #222; text-decoration: none;">{{ $lesson->episode() }}.{{ $lesson->title }}</a></h3>
+        <h3 style="text-align:center;"><a href="{{ $lesson->link() }}" target="_blank" style="color: #fff; text-decoration: none;">{{ $lesson->episode() }}.{{ $lesson->title }}</a></h3>
         <b><a href="{{ $lesson->series->link() }}" target="_blank"><img src="{{ $lesson->series->thumbnail }}" alt="{{ $lesson->series->title }}"></a></b>
         <h4><a href="{{ url('settings/notification') }}">随时取消订阅</a></h4>
         <p>Cali Castle (@abletive)</p>
