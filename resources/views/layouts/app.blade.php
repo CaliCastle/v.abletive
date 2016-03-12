@@ -19,8 +19,7 @@
     <title>@yield('title') {{ config('app.site.separator') . trans('app/site.title') }}</title>
 
     <!-- Fonts -->
-    <link href="//fonts.useso.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
-    {{--<link rel="stylesheet" href="/css/lato.css">--}}
+    <link rel="stylesheet" href="/css/lato.css">
 
     <!-- Styles -->
     <link href="{{ elixir('assets/styles.css') }}" rel="stylesheet">
