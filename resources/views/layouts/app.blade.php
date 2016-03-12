@@ -10,6 +10,7 @@
     <meta property="og:site_name" content="Cali Castle">
     <meta property="og:title" content="{{ config('app.site.title') }}">
     <meta property="og:url" content="{{ config('app.site.url') }}">
+    <meta name="apple-itunes-app" content="app-id=1050395770" />
 
     <link rel="icon" href="{{ url('favicon.png') }}">
     <link rel="apple-touch-icon" href="{{ url('favicon.png') }}">
@@ -18,7 +19,8 @@
     <title>@yield('title') {{ config('app.site.separator') . trans('app/site.title') }}</title>
 
     <!-- Fonts -->
-    <link href="http://fonts.useso.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+    <link href="//fonts.useso.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+    {{--<link rel="stylesheet" href="/css/lato.css">--}}
 
     <!-- Styles -->
     <link href="{{ elixir('assets/styles.css') }}" rel="stylesheet">
@@ -27,7 +29,7 @@
     <script src="{{ url('js/modernizr.custom.js') }}"></script>
 
     <!--[if IE]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script async src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
     @stack('scripts.header')
@@ -102,7 +104,7 @@
         });
 
     </script>
-    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=54601062" charset="UTF-8"></script>
+    <script async type="text/javascript" src="https://tajs.qq.com/stats?sId=54601062" charset="UTF-8"></script>
     @stack('scripts.footer')
 </body>
 </html>
