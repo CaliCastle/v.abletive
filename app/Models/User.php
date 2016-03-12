@@ -661,4 +661,24 @@ class User extends Authenticatable
         preg_match($pattern,$html,$matches);
         return $matches[1];
     }
+
+    /**
+     * Get the avatar image source
+     *
+     * @return string
+     */
+    public function getAvatarAttribute()
+    {
+        $avatar = $this->attributes["avatar"];
+
+        if (str_contains($avatar, 'sinaimg.cn')) {
+            return $avatar;
+        }
+
+        if (!str_contains($avatar, 'https://')) {
+            $avatar = str_replace('http', 'https', $avatar);
+        }
+
+        return $avatar;
+    }
 }
