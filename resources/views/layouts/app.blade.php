@@ -63,12 +63,6 @@
     </script>
     <script src="{{ elixir('assets/scripts.js') }}"></script>
     <script>
-        $('img').each(function () {
-            if ($(this).attr('src').indexOf("https") <= 0) {
-                $(this).attr('src', $(this).attr('src').replace("http", "https"));
-            }
-        });
-
         $(function () {
             'use strict';
 
