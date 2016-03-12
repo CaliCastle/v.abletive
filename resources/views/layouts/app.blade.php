@@ -63,14 +63,14 @@
     </script>
     <script src="{{ elixir('assets/scripts.js') }}"></script>
     <script>
+        $('img').each(function () {
+            if ($(this).attr('src').indexOf("https") <= 0) {
+                $(this).attr('src', $(this).attr('src').replace("http", "https"));
+            }
+        });
+
         $(function () {
             'use strict';
-
-            $('img').each(function () {
-                if ($(this).attr('src').indexOf("https") <= 0) {
-                    $(this).attr('src', $(this).attr('src').replace("http", "https"));
-                }
-            });
 
             @if(Auth::check())
             function logoutDidClick() {
