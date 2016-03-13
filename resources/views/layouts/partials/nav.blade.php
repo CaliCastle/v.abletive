@@ -42,6 +42,7 @@
                             <li><a href="{{ url('series') }}"><i class="fa fa-btn fa-puzzle-piece"></i> {{ trans('header/navbar.library_items.series') }}</a></li>
                             <li><a href="{{ url('lessons') }}"><i class="fa fa-btn fa-tasks"></i> {{ trans('header/navbar.library_items.catalog') }}</a></li>
                             <li><a href="{{ url('tags') }}"><i class="fa fa-btn fa-tag"></i> {{ trans('header/navbar.library_items.tags') }}</a></li>
+                            <li><a href="https://appsto.re/cn/6r8M-.i" target="_blank"><i class="fa fa-btn fa-apple"></i> iOS App</a></li>
                             <li><a href="http://app.abletive.com/tvos" target="_blank"><i class="fa fa-btn fa-television"></i> tvOS App</a></li>
                         </ul>
                     </li>
