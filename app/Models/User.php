@@ -187,7 +187,7 @@ class User extends Authenticatable
      */
     public function subscribe()
     {
-        return $this->subscription()->create(["user_id" => $this->id]);
+        return $this->subscription->delete();
     }
 
     /**
@@ -197,7 +197,7 @@ class User extends Authenticatable
      */
     public function unsubscribe()
     {
-        return $this->subscription->delete();
+        return $this->subscription()->save(new Subscription);
     }
 
     /**
@@ -207,7 +207,7 @@ class User extends Authenticatable
      */
     public function subscribed()
     {
-      return !is_null($this->subscription);
+      return is_null($this->subscription);
     }
 
     /**
