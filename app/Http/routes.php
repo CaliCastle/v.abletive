@@ -203,6 +203,14 @@ Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
     Route::get('manage/questions/{question}', 'ManageController@showEditQuestion');
     Route::post('manage/questions/{question}', 'ManageController@updateQuestion');
     Route::delete('manage/question/{question}', 'ManageController@deleteQuestion');
+
+    Route::get('manage/change_src', function() {
+        $videos = \App\Video::all();
+        foreach ($videos as $video) {
+            $video->source = str_replace('http://7xqmk7.com1.z0.glb.clouddn.com', '//o42nfwwi4.qnssl.com', $video->source);
+            $video->save();
+        }
+    });
 });
 
 /**
