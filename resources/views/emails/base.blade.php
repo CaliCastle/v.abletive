@@ -85,7 +85,7 @@
         margin-right: 10px;
     }
 
-    strong {
+    .container > strong {
         display: block;
         line-height: 100px;
         padding: 20px;

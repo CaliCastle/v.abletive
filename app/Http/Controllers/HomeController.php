@@ -271,11 +271,10 @@ class HomeController extends Controller
 
     public function test()
     {
-        $sender = User::find(10);
+        $series = Series::first();
         $user = User::first();
         $lesson = Video::first();
-        $content = "..";
 
-        return view('emails.new_comment', compact('lesson', 'user', 'lesson', 'sender', 'content'));
+        return view('emails.update', compact('lesson', 'user', 'series'));
     }
 }
