@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 
-class HomeController extends Controller
-{
+class HomeController extends Controller {
+
     /**
      * HomeController constructor.
      */
@@ -90,6 +90,7 @@ class HomeController extends Controller
      * Switch language by cookie
      *
      * @param $language
+     *
      * @return $this
      */
     public function switchLanguage($language)
@@ -105,6 +106,7 @@ class HomeController extends Controller
     public function allowsCookie()
     {
         $response = Response::create('Allowed');
+
         return $response->withCookie(cookie()->forever('allows_cookie', 'yes'));
     }
 
@@ -116,6 +118,7 @@ class HomeController extends Controller
     public function validated()
     {
         $response = Response::create('Validated');
+
         return $response->withCookie(cookie('validated', 'yes', 60 * 12 * 2));
     }
 
@@ -123,11 +126,13 @@ class HomeController extends Controller
      * Show for a skill page
      *
      * @param $skill
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showSkill($skill)
     {
         $skill = Skill::skillByName($skill);
+
         return view('skills.index', compact('skill'));
     }
 
@@ -139,6 +144,7 @@ class HomeController extends Controller
     public function showTags()
     {
         $tags = Tag::all();
+
         return view('tags.index', compact('tags'));
     }
 
@@ -146,14 +152,17 @@ class HomeController extends Controller
      * Show the tag by its name
      *
      * @param $tag
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showTag($tag)
     {
         $tag = Tag::tagByName($tag);
-        if (!$tag) {
+        if (!$tag)
+        {
             abort(404);
         }
+
         return view('tags.details', compact('tag'));
     }
 
@@ -161,6 +170,7 @@ class HomeController extends Controller
      * Search everything and return the html
      *
      * @param $keyword
+     *
      * @return array
      */
     public function searchEverything($keyword)
@@ -181,11 +191,13 @@ class HomeController extends Controller
      * Show lessons
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showLessons(Request $request)
     {
         $lessons = Video::tutor($request->user()->id)->latest()->paginate();
+
         return view('series.lessons.publish', compact('lessons'));
     }
 
@@ -201,6 +213,7 @@ class HomeController extends Controller
 
     /**
      * @param Video $lesson
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showEditLesson(Video $lesson)
@@ -212,6 +225,7 @@ class HomeController extends Controller
      * Create a new lesson
      *
      * @param LessonsRequest $request
+     *
      * @return $this|\Illuminate\Http\RedirectResponse
      */
     public function createLesson(LessonsRequest $request)
@@ -219,13 +233,16 @@ class HomeController extends Controller
         $lesson = Video::create(array_add($request->all(), 'user_id', $request->user()->id));
 
         // Something went wrong
-        if (!$lesson) {
+        if (!$lesson)
+        {
             redirect()->back()->withInput($request->all());
         }
 
         // Create tags
-        if ($request->has('tags')) {
-            foreach ($request->input('tags') as $tagName) {
+        if ($request->has('tags'))
+        {
+            foreach ($request->input('tags') as $tagName)
+            {
                 $tag = Tag::where('name', $tagName)->first();
                 // Does not exists
                 if (is_null($tag))
@@ -247,17 +264,20 @@ class HomeController extends Controller
      *
      * @param LessonsRequest $request
      * @param Video $lesson
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateLesson(LessonsRequest $request, Video $lesson)
     {
-        if (!$lesson->update($request->all())) {
+        if (!$lesson->update($request->all()))
+        {
             return redirect()->back()->withInput($request->all());
         }
 
         $tag_ids = [];
         // Create tags
-        foreach ($request->input('tags') as $tagName) {
+        foreach ($request->input('tags') as $tagName)
+        {
             $tag = Tag::where('name', $tagName)->first();
             // Does not exists
             if (is_null($tag))
@@ -271,10 +291,18 @@ class HomeController extends Controller
 
     public function test()
     {
-        $series = Series::first();
-        $user = User::first();
-        $lesson = Video::first();
+        $lessons = Video::all();
+        $count = 0;
 
-        return view('emails.update', compact('lesson', 'user', 'series'));
+        foreach ($lessons as $lesson)
+        {
+            if (!str_contains($lesson->source, 'http'))
+            {
+                $lesson->source = "https:" . $lesson->source;
+                $count ++;
+            }
+        }
+
+        return "Cool, refactored {$count} times.";
     }
 }
