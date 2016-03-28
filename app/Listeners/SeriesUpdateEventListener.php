@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\SeriesUpdateEvent;
+use App\Jobs\UpdatesSeries;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,16 +28,6 @@ class SeriesUpdateEventListener implements ShouldQueue
      */
     public function handle(SeriesUpdateEvent $event)
     {
-        $series = $event->series;
-        $lesson = $series->lessons->reverse()->first();
-
-        foreach ($series->subscriber as $user) {
-            if ($user->subscribed() && !is_null($user->email) && $user->email != "") {
-                Mail::queue('emails.update', ['user' => $user, 'series' => $series, 'lesson' => $lesson], function ($m) use ($user) {
-                    $m->from('cali@calicastle.com', config('app.site.title'));
-                    $m->to($user->email)->subject('您订阅的课程更新啦!');
-                });
-            }
-        }
+        (new UpdatesSeries($event->series))->handle();
     }
 }

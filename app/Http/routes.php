@@ -30,8 +30,7 @@ Route::group(['middleware' => 'web'], function () {
     });
     Route::get('/home', 'HomeController@index');
 
-    Route::get('test', 'HomeController@test');
-
+//    Route::get('test', 'HomeController@test');
     
     /*
      * Pages
