@@ -299,6 +299,7 @@ class HomeController extends Controller {
             if (!str_contains($lesson->source, 'http'))
             {
                 $lesson->source = "https:" . $lesson->source;
+                $lesson->save();
                 $count ++;
             }
         }
