@@ -28,6 +28,6 @@ class SeriesUpdateEventListener implements ShouldQueue
      */
     public function handle(SeriesUpdateEvent $event)
     {
-        (new UpdatesSeries($event->series))->handle();
+        dispatch(new UpdatesSeries($event->series));
     }
 }
