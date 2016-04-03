@@ -1,27 +1,52 @@
-## Laravel PHP Framework
+## Abletive Screen Cast
+![Abletive](https://v.abletive.com/favicon.png)
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+This website is for those who are confused by the MIDI hardwares and think that software is too hard to learn for producing music.
+We present professional screen cast videos, tailored just for you to learn the whole Music Production process.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+**Site features:**
+- Multiple roles
+- Favorite, discuss and watch later
+- Profile & learning journey
+- AJAX Search & filter series and lessons
+- Backend management
+- Modern UI with smooth animations
+- Bilingual support
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+Built using [Laravel](https://laravel.com) by [Cali](http://calicastle.com)
 
-## Official Documentation
+> Special thanks to & inspired by [Laracasts(@Jeffrey Way)](https://laracasts.com)
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+## Official Website
 
-## Contributing
+Every line of code that's written to make it happen is in this repository, site demonstration: [Abletive Screen Cast](https://v.abletive.com)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+## Screenshots
 
-## Security Vulnerabilities
+**Welcome page:**
+![welcome](http://mmbiz.qpic.cn/mmbiz/BicDictdqZia5BE2eg9613Q0TW6pUsGaGSmCQUGPJmc82G6NMOicNssAjAHmYnxxMClteMJKtYMdqsEicAc4FicJvibYg/640?wx_fmt=jpeg)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+**Watch series:**
+![series](http://mmbiz.qpic.cn/mmbiz/BicDictdqZia5BE2eg9613Q0TW6pUsGaGSmC4m9ppbzeMZr8mFtn5M6wv6cBPTJM5h3Xlv8znb9qVuuMRF5HyllaQ/640?wx_fmt=jpeg)
+
+**Testimonials:**
+![testimonials](http://mmbiz.qpic.cn/mmbiz/BicDictdqZia5BE2eg9613Q0TW6pUsGaGSmvSwMSjWu5foLU3hnPP3S7dSH6kodxLibsHOYkbVyDugwicGOMuu5LiafA/640?wx_fmt=jpeg)
+
+**Study history:**
+![](http://mmbiz.qpic.cn/mmbiz/BicDictdqZia5BE2eg9613Q0TW6pUsGaGSmibuD33mQKBnkd40GZqfjPBO9ceKMib7GoXZfH5rbmmLGNr9goibveBNHQ/640?wx_fmt=jpeg)
+
+### Warnings:
+- The `User Authentication and Registration APIs` are maintained only in Abletive main site, due to security and privacy reasons
+the code is written in the vendor files by Cali and is **NOT INCLUDED** in this repo. 
+You can tinker around by manually creating `User` model via `php artisan tinker`
+Or, simply change the code a bit. Have fun playing around :)
+
+### Contributions:
+
+I'd be happy if you want to contribute your ideas or code, if you're not familiar with Laravel just yet, go check the [documentation](https://laravel.com/docs)(It's pretty neat)
+
+Feel free to **create issues** or **pull requests**
 
 ### License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+Abletive Screen Cast is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
