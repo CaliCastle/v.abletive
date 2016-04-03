@@ -11,17 +11,9 @@
 |
 */
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| This route group applies the "web" middleware group to every route
-| it contains. The "web" middleware group is defined in your HTTP
-| kernel and includes session state, CSRF protection, and more.
-|
-*/
-
+/**
+ * Routes can be visited for everyone
+ */
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
@@ -30,6 +22,7 @@ Route::group(['middleware' => 'web'], function () {
     });
     Route::get('/home', 'HomeController@index');
 
+// In case we need to test something out real quick
 //    Route::get('test', 'HomeController@test');
     
     /*
@@ -102,6 +95,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('search/{keyword}', 'HomeController@searchEverything');
 });
 
+/**
+ * Routes needed to be logged in
+ */
 Route::group(['middleware' => ['web', 'auth']], function () {
     /*
      * Watch laters
@@ -144,65 +140,86 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('comments/upload_image', 'UserController@uploadImage');
 });
 
+/**
+ * Routes for tutors only
+ */
 Route::group(['middleware' => ['web', 'auth', 'tutor']], function () {
-    Route::get('publish/lessons', 'HomeController@showLessons');
-    Route::get('publish/lessons/create', 'HomeController@showCreateLesson');
-    Route::get('publish/lessons/edit/{lesson}', 'HomeController@showEditLesson');
-    Route::post('publish/lessons/create', 'HomeController@createLesson');
-    Route::post('publish/lessons/edit/{lesson}', 'HomeController@updateLesson');
-    Route::get('publish/lessons/search/{keyword}', 'HomeController@searchLessons');
-
+    Route::group(['prefix' => 'publish/lessons'], function () {
+        Route::get('/', 'HomeController@showLessons');
+        Route::get('create', 'HomeController@showCreateLesson');
+        Route::get('edit/{lesson}', 'HomeController@showEditLesson');
+        Route::post('create', 'HomeController@createLesson');
+        Route::post('edit/{lesson}', 'HomeController@updateLesson');
+        Route::get('search/{keyword}', 'HomeController@searchLessons');
+    });
 });
 
+/**
+ * Routes for managers only
+ */
 Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
-    // Index overview
-    Route::get('manage', 'ManageController@index');
-    // Series related
-    Route::get('manage/series', 'ManageController@showSeries');
-    Route::get('manage/series/create', 'ManageController@showCreateSeries');
-    Route::get('manage/series/edit/{series}', 'ManageController@showEditSeries');
-    Route::post('manage/series/create', 'ManageController@createSeries');
-    Route::post('manage/series/edit/{series}', 'ManageController@updateSeries');
-    Route::get('manage/series/search/{keyword}', 'ManageController@searchSeries');
-    Route::delete('manage/series/{series}', 'ManageController@deleteSeries');
+    Route::group(['prefix' => 'manage'], function () {
+        // Index overview
+        Route::get('/', 'ManageController@index');
+        
+        // Series related
+        Route::group(['prefix' => 'series'], function () {
+            Route::get('/', 'ManageController@showSeries');
+            Route::get('create', 'ManageController@showCreateSeries');
+            Route::get('edit/{series}', 'ManageController@showEditSeries');
+            Route::post('create', 'ManageController@createSeries');
+            Route::post('edit/{series}', 'ManageController@updateSeries');
+            Route::get('search/{keyword}', 'ManageController@searchSeries');
+            Route::delete('{series}', 'ManageController@deleteSeries');
+        });
 
-    // Lessons related
-    Route::get('manage/lessons', 'ManageController@showLessons');
-    Route::get('manage/lessons/create', 'ManageController@showCreateLesson');
-    Route::get('manage/lessons/edit/{lesson}', 'ManageController@showEditLesson');
-    Route::post('manage/lessons/create', 'ManageController@createLesson');
-    Route::post('manage/lessons/edit/{lesson}', 'ManageController@updateLesson');
-    Route::get('manage/lessons/search/{keyword}', 'ManageController@searchLessons');
-    Route::delete('manage/lessons/{lesson}', 'ManageController@deleteLesson');
+        // Lessons related
+        Route::group(['prefix' => 'lessons'], function () {
+            Route::get('/', 'ManageController@showLessons');
+            Route::get('create', 'ManageController@showCreateLesson');
+            Route::get('edit/{lesson}', 'ManageController@showEditLesson');
+            Route::post('create', 'ManageController@createLesson');
+            Route::post('edit/{lesson}', 'ManageController@updateLesson');
+            Route::get('search/{keyword}', 'ManageController@searchLessons');
+            Route::delete('{lesson}', 'ManageController@deleteLesson');
+        });
 
-    // Skills related
-    Route::get('manage/skills', 'ManageController@showSkills');
-    Route::get('manage/skills/edit/{skill}', 'ManageController@showEditSkill');
-    Route::post('manage/skills/edit/{skill}', 'ManageController@updateSkill');
+        // Skills related
+        Route::group(['prefix' => 'skills'], function () {
+            Route::get('/', 'ManageController@showSkills');
+            Route::get('edit/{skill}', 'ManageController@showEditSkill');
+            Route::post('edit/{skill}', 'ManageController@updateSkill');
+        });
 
-    // Users related
-    Route::get('manage/users', 'ManageController@showUsers');
-    Route::put('manage/users/promote/{user}', 'ManageController@promoteUser');
+        // Users related
+        Route::group(['prefix' => 'users'], function () {
+            Route::get('/', 'ManageController@showUsers');
+            Route::put('promote/{user}', 'ManageController@promoteUser');
+        });
 
-    // Comments related
-    Route::get('manage/comments', 'ManageController@showComments');
-    Route::get("manage/comments/search/{keyword}", 'ManageController@searchComments');
-    Route::delete('manage/comments/{comment}', 'ManageController@deleteComment');
+        // Comments related
+        Route::group(['prefix' => 'comments'], function () {
+            Route::get('/', 'ManageController@showComments');
+            Route::get("search/{keyword}", 'ManageController@searchComments');
+            Route::delete('{comment}', 'ManageController@deleteComment');
+        });
 
-    // Examinations related
-    Route::get('manage/examinations', 'ManageController@showExaminations');
-    Route::get('manage/examination/create', 'ManageController@showCreateExamination');
-    Route::post('manage/examination/create', 'ManageController@createExamination');
-    Route::get('manage/examination/{examination}', 'ManageController@showEditExamination');
-    Route::post('manage/examination/{examination}', 'ManageController@updateExamination');
-    Route::delete('manage/examination/{examination}', 'ManageController@deleteExamination');
+        // Examinations related
+        // TODO: New Feature of Examinations
+        Route::get('examinations', 'ManageController@showExaminations');
+        Route::get('examination/create', 'ManageController@showCreateExamination');
+        Route::post('examination/create', 'ManageController@createExamination');
+        Route::get('examination/{examination}', 'ManageController@showEditExamination');
+        Route::post('examination/{examination}', 'ManageController@updateExamination');
+        Route::delete('examination/{examination}', 'ManageController@deleteExamination');
 
-    Route::get('manage/examination/{examination}/questions', 'ManageController@showExamQuestions');
-    Route::get('manage/examination/{examination}/questions/create', 'ManageController@showCreateQuestion');
-    Route::post('manage/examination/{examination}/questions/create', 'ManageController@createQuestion');
-    Route::get('manage/questions/{question}', 'ManageController@showEditQuestion');
-    Route::post('manage/questions/{question}', 'ManageController@updateQuestion');
-    Route::delete('manage/question/{question}', 'ManageController@deleteQuestion');
+        Route::get('examination/{examination}/questions', 'ManageController@showExamQuestions');
+        Route::get('examination/{examination}/questions/create', 'ManageController@showCreateQuestion');
+        Route::post('examination/{examination}/questions/create', 'ManageController@createQuestion');
+        Route::get('questions/{question}', 'ManageController@showEditQuestion');
+        Route::post('questions/{question}', 'ManageController@updateQuestion');
+        Route::delete('question/{question}', 'ManageController@deleteQuestion');
+    });
 });
 
 /**
@@ -210,16 +227,20 @@ Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
  */
 Route::group(['middleware' => ['web']], function () {
     // JSON api related
-    Route::get('api/catalogs', 'APIController@showCatalogs');
-    Route::get('api/index', 'APIController@showIndex');
-    Route::get('api/series/{series}', 'APIController@showSeries');
+    Route::group(['prefix' => 'api'], function () {
+        Route::get('catalogs', 'APIController@showCatalogs');
+        Route::get('index', 'APIController@showIndex');
+        Route::get('series/{series}', 'APIController@showSeries');
+    });
 
     // tvOS related
-    Route::get('tvOS/templates/Index.xml', 'APIController@showIndexTVML');
-    Route::get('tvOS/templates/Series.{series}.xml', 'APIController@showSeriesTVML');
-    Route::get('tvOS/templates/Skill.{skill}.xml', 'APIController@showSkillTVML');
-    Route::get('tvOS/templates/Tutor.{tutor}.xml', 'APIController@showTutorTVML');
-    Route::get('tvOS/templates/Login.xml', 'APIController@showLoginTVML');
-    Route::get('tvOS/templates/MySeries.xml', 'APIController@showMySeriesTVML');
+    Route::group(['prefix' => 'tvOS/templates'], function () {
+        Route::get('Index.xml', 'APIController@showIndexTVML');
+        Route::get('Series.{series}.xml', 'APIController@showSeriesTVML');
+        Route::get('Skill.{skill}.xml', 'APIController@showSkillTVML');
+        Route::get('Tutor.{tutor}.xml', 'APIController@showTutorTVML');
+        Route::get('Login.xml', 'APIController@showLoginTVML');
+        Route::get('MySeries.xml', 'APIController@showMySeriesTVML');
+    });
     Route::get('tvOS/search/{keyword}', 'APIController@searchContent');
 });
