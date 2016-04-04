@@ -8,6 +8,7 @@ use App\Events\SeriesUpdateEvent;
 use App\Examination;
 use App\Http\Requests\LessonsRequest;
 use App\Http\Requests\SeriesRequest;
+use App\Jobs\PublishesANewSeries;
 use App\Question;
 use App\Series;
 use App\Skill;
@@ -155,12 +156,9 @@ class ManageController extends Controller
      * @param SeriesRequest $request
      * @return $this|\Illuminate\Http\RedirectResponse
      */
-    public function createSeries(SeriesRequest $request)
+    public function createSeries()
     {
-        $series = Series::create($request->all());
-        if (!$series)
-            return redirect()->back()->withInput($request->all());
-        $series->skills()->attach($request->input('skills'));
+        $this->dispatch(new PublishesANewSeries);
 
         return redirect('manage/series')->with('status', trans('messages.create_success'));
     }
