@@ -43,7 +43,7 @@ class PublishesANewSeries extends Job implements ShouldQueue {
         $this->series = $series;
 
         // Send email notifications
-        $this->sendEmail();
+//        $this->sendEmail();
     }
 
     /**
