@@ -23,7 +23,7 @@
                     <div class="bg"></div>
                     <div class="info">
                         <h1>{{ trans('messages.subscription_heading') }}</h1>
-                        <h4>{{ trans('messages.subscription_message') }}</h4>
+                        <h4>{!! trans('messages.subscription_message') !!}</h4>
                         <a href="{{ url('settings/subscription') }}">{{ trans('messages.subscription_button') }}</a>
                     </div>
                 </div>
