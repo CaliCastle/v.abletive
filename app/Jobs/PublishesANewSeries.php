@@ -2,10 +2,8 @@
 
 namespace App\Jobs;
 
-use App\User;
+use Slack;
 use App\Series;
-use App\Jobs\Job;
-use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\SeriesRequest;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -36,31 +34,43 @@ class PublishesANewSeries extends Job implements ShouldQueue {
     public function handle(SeriesRequest $request)
     {
         $series = Series::create($request->all());
-        if (!$series)
+        if (! $series)
             return redirect()->back()->withInput($request->all());
         $series->skills()->attach($request->input('skills'));
 
         $this->series = $series;
 
-        // Send email notifications
-//        $this->sendEmail();
+        $this->sendSlack();
     }
 
     /**
-     * Send email to its subscribers
+     * Send slack notification.
      *
      * @return $this
      */
-    private function sendEmail()
+    private function sendSlack()
     {
-        foreach (User::all() as $user) {
-            if ($user->subscribed() && !is_null($user->email) && $user->email != "") {
-                Mail::queue('emails.new_series', ['user' => $user, 'series' => $this->series], function ($m) use ($user) {
-                    $m->from('cali@calicastle.com', config('app.site.title'));
-                    $m->to($user->email)->subject('您订阅的课程更新啦!');
-                });
-            }
-        }
+        $message = sprintf(
+            '新的课程 <%s|《%s》>发布了, %s难度。 <%s|封面图>',
+            $this->series->link(),
+            $this->series->title,
+            trans('lessons.difficulty.' . strtolower($this->series->difficulty)),
+            $this->series->thumbnail
+        );
+
+        Slack::to('#general')
+            ->attach([
+                'fallback'    => $message,
+                'author_name' => '所属技能: ' . trans('skills.' . $this->series->skills()->first()->name),
+                'fields'      => [
+                    [
+                        'title' => '课程描述：',
+                        'value' => $this->series->description,
+                        'short' => true
+                    ]
+                ]
+            ])
+            ->send($message);
 
         return $this;
     }

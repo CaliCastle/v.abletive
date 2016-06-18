@@ -10,8 +10,6 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class CommentReplyEvent extends Event
 {
-    use SerializesModels;
-
     public $sender;
     public $receiver;
     public $lesson;

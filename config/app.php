@@ -203,6 +203,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ViewComposerServiceProvider::class,
 
+        \Maknz\Slack\SlackServiceProvider::class
     ],
 
     /*
@@ -249,6 +250,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
+        'Slack' => \Maknz\Slack\Facades\Slack::class
     ],
 
 ];

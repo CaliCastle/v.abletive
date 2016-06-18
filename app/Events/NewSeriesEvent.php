@@ -9,8 +9,6 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class NewSeriesEvent extends Event
 {
-    use SerializesModels;
-
     public $series;
 
     /**

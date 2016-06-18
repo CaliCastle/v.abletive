@@ -53,6 +53,31 @@ class UpdatesSeries extends Job implements ShouldQueue
                 });
             }
         }
+
+        $message = sprintf(
+            '<%s|《%s》>系列现在更新啦, 时长%s的新集:<%s|【%s】>',
+            $this->series->link(),
+            $this->series->title,
+            $lesson->duration,
+            $lesson->link(),
+            $lesson->title
+        );
+
+        Slack::to('#video')
+            ->attach([
+                'fallback'    => $message,
+                'author_name' => '@' . $lesson->user->display_name,
+                'author_link' => $lesson->user->profileLink(),
+                'fields'      => [
+                    [
+                        'title' => '：',
+                        'value' => $lesson->description,
+                        'short' => true
+                    ]
+                ]
+            ])
+            ->send($message);
+
         return $this;
     }
 }
