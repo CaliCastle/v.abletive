@@ -42,20 +42,21 @@ class DailyReport extends Command
         $todayUsers = User::justRegistered()->count();
         $totalUsers = User::count();
         
-        Slack::to("@cali")
+        Slack::to("#video")
             ->attach([
-                'fallback' => "Today we have {$todayUsers} users signed up, *out of {$totalUsers} users.*",
+                'fallback' => "今天有 *{$todayUsers}* 个用户从主站前往登录或注册了帐号, *站点总共有 {$totalUsers} 名用户.*",
                 'fields' => [
                     [
-                        'title' => 'New registers or sign ups today',
-                        'value' => $todayUsers . " users."
+                        'title' => '今天新用户（从主站转入/新注册）',
+                        'value' => $todayUsers . "名用户.",
+                        'short' => true
                     ],
                     [
-                        'title' => 'Total users we got',
-                        'value' => $totalUsers . " users."
+                        'title' => '教学视频网站一共拥有',
+                        'value' => $totalUsers . "名用户."
                     ]
                 ]
             ])
-            ->send("Daily Report");
+            ->send("[每日报告] 教学网站数据统计");
     }
 }
