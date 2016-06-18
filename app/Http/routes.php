@@ -158,6 +158,10 @@ Route::group(['middleware' => ['web', 'auth', 'tutor']], function () {
  * Routes for managers only
  */
 Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
+    Route::get('report', function () {
+        Artisan::call('report:daily');    
+    });
+    
     Route::group(['prefix' => 'manage'], function () {
         // Index overview
         Route::get('/', 'ManageController@index');
