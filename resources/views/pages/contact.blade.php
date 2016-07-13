@@ -22,7 +22,7 @@
                 <h2 class="big-heading"><span class="subtitle">加入QQ群</span><span>官方QQ群</span></h2>
             </div>
             <div class="row qq-qrcode">
-                <div class="col-lg-6"><img src="{{ url('assets/images/qq_qrcode1.JPG') }}" alt=""></div>
+                <div class="col-lg-6"><img src="{{ url('assets/images/qq2_qrcode.JPG') }}" alt=""></div>
                 <div class="col-lg-6"><img src="{{ url('assets/images/qq_qrcode2.JPG') }}" alt=""></div>
             </div>
             <div class="row">

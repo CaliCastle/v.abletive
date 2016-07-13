@@ -10,7 +10,7 @@
             <div class="row">
                 <ul class="list-unstyled list-inline related-links">
                     <li><a href="http://wechat.abletive.com" target="_blank"><i class="fa fa-wechat"></i></a></li>
-                    <li><a href="http://jq.qq.com/?_wv=1027&k=28ZWsyC" target="_blank"><i class="fa fa-qq"></i></a></li>
+                    <li><a href="http://jq.qq.com/?_wv=1027&k=2FQDmwP" target="_blank"><i class="fa fa-qq"></i></a></li>
                     <li><a href="http://weibo.com/abletive" target="_blank"><i class="fa fa-weibo"></i></a></li>
                 </ul>
             </div>
