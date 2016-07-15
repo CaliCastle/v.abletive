@@ -78,7 +78,7 @@
 
 @push('scripts.footer')
 <script src="{{ url('js/dropzone.js') }}"></script>
-<script src="{{ url('js/hexaflip.js') }}"></script>
+{{--<script src="{{ url('js/hexaflip.js') }}"></script>--}}
 <script>
     $(function () {
         var $reply_area = $($('#reply-textarea')[0]);
@@ -188,72 +188,6 @@
                 dictInvalidFileType: "{{ trans('messages.upload_filetype') }}",
                 dictMaxFilesExceeded: "{{ trans('messages.upload_files') }}"
         };
-
-        var validate_errors = 0,
-            makeObject = function(a){
-            var o = {};
-            for(var i = 0, l = a.length; i < l; i++){
-                o['letter' + i] = a;
-            }
-            return o;
-        },
-            getSequence = function(a, reverse, random){
-                var o = {}, p;
-                for(var i = 0, l = a.length; i < l; i++){
-                    if(reverse){
-                        p = l - i - 1;
-                    }else if(random){
-                        p = Math.floor(Math.random() * l);
-                    }else{
-                        p = i;
-                    }
-                    o['letter' + i] = a[p];
-                }
-                return o;
-            };
-
-        @unless(request()->hasCookie('validated'))
-        $validateCubes = new HexaFlip(document.getElementById('flip-validation'), makeObject("CALI".split('')),{
-            size: 150,
-            margin: 12,
-            fontSize: 100,
-            perspective: 450
-        });
-
-        $validateCubes.setValue(getSequence("CALI", false, true));
-
-        $('a#submit-validation').click(function () {
-            if (validate_errors >= 3) {
-                validate_errors = 0;
-                $($valiadtion).fadeOut();
-                return false;
-            }
-
-            if ($validateCubes.getValue().join('') != "CALI") {
-                validate_errors++;
-                $validateCubes.setValue(getSequence("CALI", false, true));
-            } else {
-                $($valiadtion).fadeOut();
-
-                $.ajax({
-                    url: "{{ url('validated') }}",
-                    type: "POST",
-                    data: {_token: $_token},
-                    dataType: "text",
-                    success: function () {
-
-                    }
-                });
-                submitComment();
-            }
-        });
-
-        $($valiadtion).dblclick(function (e) {
-            if (e.target == this) {
-                $($valiadtion).fadeOut();
-            }
-        });
-        @endunless
 
         // Watch later actions
         $('a#watch-later-btn').each(function () {
@@ -430,11 +364,7 @@
         }
 
         $submit_button.on('click', function () {
-            @if(request()->hasCookie('validated'))
             submitComment();
-            @else
-            $($valiadtion).fadeIn();
-            @endif
         });
 
         // Load more comments
