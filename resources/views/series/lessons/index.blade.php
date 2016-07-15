@@ -212,48 +212,48 @@
                 return o;
             };
 
-        @unless(request()->hasCookie('validated'))
-        $validateCubes = new HexaFlip(document.getElementById('flip-validation'), makeObject("CALI".split('')),{
-            size: 150,
-            margin: 12,
-            fontSize: 100,
-            perspective: 450
-        });
+        {{--@unless(request()->hasCookie('validated'))--}}
+        {{--$validateCubes = new HexaFlip(document.getElementById('flip-validation'), makeObject("CALI".split('')),{--}}
+            {{--size: 150,--}}
+            {{--margin: 12,--}}
+            {{--fontSize: 100,--}}
+            {{--perspective: 450--}}
+        {{--});--}}
 
-        $validateCubes.setValue(getSequence("CALI", false, true));
+        {{--$validateCubes.setValue(getSequence("CALI", false, true));--}}
 
-        $('a#submit-validation').click(function () {
-            if (validate_errors >= 3) {
-                validate_errors = 0;
-                $($valiadtion).fadeOut();
-                return false;
-            }
+        {{--$('a#submit-validation').click(function () {--}}
+            {{--if (validate_errors >= 3) {--}}
+                {{--validate_errors = 0;--}}
+                {{--$($valiadtion).fadeOut();--}}
+                {{--return false;--}}
+            {{--}--}}
 
-            if ($validateCubes.getValue().join('') != "CALI") {
-                validate_errors++;
-                $validateCubes.setValue(getSequence("CALI", false, true));
-            } else {
-                $($valiadtion).fadeOut();
+            {{--if ($validateCubes.getValue().join('') != "CALI") {--}}
+                {{--validate_errors++;--}}
+                {{--$validateCubes.setValue(getSequence("CALI", false, true));--}}
+            {{--} else {--}}
+                {{--$($valiadtion).fadeOut();--}}
 
-                $.ajax({
-                    url: "{{ url('validated') }}",
-                    type: "POST",
-                    data: {_token: $_token},
-                    dataType: "text",
-                    success: function () {
+                {{--$.ajax({--}}
+                    {{--url: "{{ url('validated') }}",--}}
+                    {{--type: "POST",--}}
+                    {{--data: {_token: $_token},--}}
+                    {{--dataType: "text",--}}
+                    {{--success: function () {--}}
 
-                    }
-                });
-                submitComment();
-            }
-        });
+                    {{--}--}}
+                {{--});--}}
+                {{--submitComment();--}}
+            {{--}--}}
+        {{--});--}}
 
-        $($valiadtion).dblclick(function (e) {
-            if (e.target == this) {
-                $($valiadtion).fadeOut();
-            }
-        });
-        @endunless
+        {{--$($valiadtion).dblclick(function (e) {--}}
+            {{--if (e.target == this) {--}}
+                {{--$($valiadtion).fadeOut();--}}
+            {{--}--}}
+        {{--});--}}
+        {{--@endunless--}}
 
         // Watch later actions
         $('a#watch-later-btn').each(function () {
@@ -336,7 +336,6 @@
                 if ((event.ctrlKey || event.metaKey) && e.which == 13) {
                     event.preventDefault();
                     $('a#reply-submit').trigger('click');
-                    console.log('..');
                 }
             });
         });
@@ -431,11 +430,11 @@
         }
 
         $submit_button.on('click', function () {
-            @if(request()->hasCookie('validated'))
+{{--            @if(request()->hasCookie('validated'))--}}
             submitComment();
-            @else
-            $($valiadtion).fadeIn();
-            @endif
+            {{--@else--}}
+//            $($valiadtion).fadeIn();
+            {{--@endif--}}
         });
 
         // Load more comments
