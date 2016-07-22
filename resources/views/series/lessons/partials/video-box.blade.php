@@ -90,7 +90,7 @@
             @if(Auth::check())
             <li><a href="javascript:;" class="action-button{{ auth()->user()->hasWatchLater($lesson) ? " active" : "" }}" id="watch-later-btn"><i class="fa fa-btn fa-clock-o"></i> {{ trans('lessons.watch-later') }}</a></li>
             <li><a href="javascript:;" class="action-button{{ auth()->user()->hasFavorite($lesson) ? " active" : "" }}" id="favorite-btn"><i class="fa fa-btn fa-heart"></i> {{ trans('lessons.favorite') }}</a></li>
-            <li><a href="{{ $lesson->downloadLink() }}" download target="_blank" class="action-button"><i class="fa fa-btn fa-cloud-download"></i> {{ trans('lessons.download') }}</a></li>
+            {{--<li><a href="{{ $lesson->downloadLink() }}" download target="_blank" class="action-button"><i class="fa fa-btn fa-cloud-download"></i> {{ trans('lessons.download') }}</a></li>--}}
             @endif
             <li><a href="javascript:;" id="go-to-discuss" class="action-button"><i class="fa fa-btn fa-comments-o"></i> {{ trans('lessons.discuss') }}</a></li>
             @if(Auth::check())
