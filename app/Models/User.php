@@ -40,7 +40,9 @@ class User extends Authenticatable
      */
     public static function search($keyword)
     {
-        return static::where('display_name', 'like', "%{$keyword}%")->orWhere('description', 'like', "%{$keyword}%");
+        return static::where('display_name', 'like', "%{$keyword}%")
+            ->orWhere('description', 'like', "%{$keyword}%")
+            ->orWhere('name', 'like', "%{$keyword}%");
     }
 
     /**
