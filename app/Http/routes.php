@@ -199,6 +199,7 @@ Route::group(['middleware' => ['web', 'auth', 'manager']], function () {
         Route::group(['prefix' => 'users'], function () {
             Route::get('/', 'ManageController@showUsers');
             Route::put('promote/{user}', 'ManageController@promoteUser');
+            Route::get('search/{keyword}', 'ManageController@searchUsers');
         });
 
         // Comments related

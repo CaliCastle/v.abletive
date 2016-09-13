@@ -554,4 +554,14 @@ class ManageController extends Controller
             'message' => "删除失败"
         ];
     }
+
+    /**
+     * @param $keyword
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function searchUsers($keyword)
+    {
+        $users = User::search($keyword)->paginate();
+        return view('manage.users', compact('keyword', 'users'));
+    }
 }

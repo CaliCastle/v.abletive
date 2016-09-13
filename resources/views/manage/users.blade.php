@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', trans('manage/users.title'))
+@section('title', isset($keyword) ? '\'' . $keyword . '\'' . trans('manage/users.title') : trans('manage/users.title'))
 
 @section('content')
     <div class="container">
@@ -8,7 +8,9 @@
             @include('manage.partials.nav')
             <aside class="box-right">
                 <div class="content">
-                    <h2 class="heading">{{ trans('manage/users.title') }}</h2>
+                    <h2 class="heading">
+                        {{ trans('manage/users.title') }}
+                        <a href="javascript:;" id="search-button"><i class="fa fa-search"></i></a></h2>
                     <div class="row">
                         @if(count($users))
                             <table class="table table-responsive table-striped">
@@ -53,6 +55,27 @@
 @push('scripts.footer')
 <script>
     $(function () {
+        $("a#search-button").click(function () {
+            swal({
+                title: "{{ trans('manage/series.search_box_title') }}",
+                text: "{{ trans('manage/series.search_box_message') }}:",
+                type: "input",
+                inputType: "search",
+                showCancelButton: true,
+                closeOnConfirm: true,
+                cancelButtonText: "{{ trans('messages.cancel_button') }}",
+                confirmButtonText: "{{ trans('messages.search_button') }}",
+                animation: "slide-from-bottom",
+            }, function (inputValue) {
+                if (inputValue === false) return;
+                if (inputValue === "") {
+                    swal.showInputError("...");
+                    return;
+                }
+                window.location.href = "{{ url('manage/users/search/') }}/" + inputValue;
+            });
+        });
+
         $('a#promote-btn').each(function () {
             $(this).click(function () {
                 var $id = $($(this).parents('tr')[0]).attr('data-id');
