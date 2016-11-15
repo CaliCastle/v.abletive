@@ -573,6 +573,9 @@ class ManageController extends Controller
      */
     public function deleteUser(User $user)
     {
+        if (auth()->user()->id == $user->id)
+            return false;
+
         return $user->delete() ? [
             'status' => "success",
             'message' => "Deleted successfully"

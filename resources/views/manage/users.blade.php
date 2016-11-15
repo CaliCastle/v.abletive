@@ -31,8 +31,8 @@
                                         <td>
                                             @unless($user->id == auth()->user()->id)
                                             <a href="javascript:;" id="promote-btn">{{ $user->isTutor() || $user->isManager() ? trans('manage/users.unpromote') : trans('manage/users.promote') }}</a>
-                                            @endunless
                                             <a href="javascript:;" id="delete-btn">删除</a>
+                                            @endunless
                                         </td>
                                     </tr>
                                 @endforeach
