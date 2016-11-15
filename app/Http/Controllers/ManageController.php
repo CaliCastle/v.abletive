@@ -564,4 +564,21 @@ class ManageController extends Controller
         $users = User::search($keyword)->paginate();
         return view('manage.users', compact('keyword', 'users'));
     }
+
+    /**
+     * Deletes a user.
+     *
+     * @param User $user
+     * @return array
+     */
+    public function deleteUser(User $user)
+    {
+        return $user->delete() ? [
+            'status' => "success",
+            'message' => "Deleted successfully"
+        ] : [
+            'status' => "error",
+            'message' => "Error occurred"
+        ];
+    }
 }

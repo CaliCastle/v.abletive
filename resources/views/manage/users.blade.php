@@ -32,6 +32,7 @@
                                             @unless($user->id == auth()->user()->id)
                                             <a href="javascript:;" id="promote-btn">{{ $user->isTutor() || $user->isManager() ? trans('manage/users.unpromote') : trans('manage/users.promote') }}</a>
                                             @endunless
+                                            <a href="javascript:;" id="delete-btn">删除</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -93,6 +94,28 @@
                             swal({title:data.message, timer: 1000, type: data.status, showConfirmButton: false});
                         }
                     });
+                });
+            });
+        });
+
+        $('a#delete-btn').each(function () {
+            $(this).click(function () {
+                var $id = $($(this).parents('tr')[0]).attr('data-id');
+
+                swal({
+                    title: "确定删除用户吗",
+                    type: "warning",
+                    showCancelButton: true,
+                    showConfirmButton: true
+                }, function () {
+                    $.ajax({
+                        url: "{{ url('manage/users/') }}/" + $id,
+                        data: {_token: "{{ csrf_token() }}"},
+                        type: "DELETE",
+                        success: function (data) {
+                            window.location.href = "{{ url('manage/users') }}";
+                        }
+                    })
                 });
             });
         });
